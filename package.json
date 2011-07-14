@@ -1,0 +1,6 @@
+{
+  "name": "carapace",
+  "dependencies": {
+    "dnode": "0.7.x"
+  }
+}
