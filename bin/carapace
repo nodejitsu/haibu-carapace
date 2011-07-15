@@ -14,7 +14,7 @@ var dnode = require('dnode');
 // Carapace arguments are for the rooting environment
 //  * carapace.bridge
 //
-var bridgePath = process.argv.splice(2,1)[0];
+var bridgePath = path.resolve(process.argv.splice(2,1)[0]);
 var bridgeServer = net.createServer();
 bridgeServer.listen(bridgePath);
 //
@@ -31,6 +31,12 @@ var bridge = new dnode({
   }
 });
 bridge.listen(bridgeServer);
+bridgeServer.on('connection', function(conn) {
+  libev.Unref();
+  conn.on('close',function(){
+    libev.Ref();
+  })
+});
 
 carapace.on('plugin',function(toRequire, done) {
   try {
