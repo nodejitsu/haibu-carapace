@@ -1,6 +1,12 @@
 {
   "name": "carapace",
+  "version": "0.0.0",
+  "main": "lib/index.js",
   "dependencies": {
-    "dnode": "0.7.x"
+    "dnode": "0.7.x",
+    "daemon": "0.3.x"
+  },
+  "bin": {
+    "carapace": "./bin/carapace"
   }
 }

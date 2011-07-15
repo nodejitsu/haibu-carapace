@@ -18,9 +18,10 @@ var bridgePath = process.argv.splice(2,1)[0];
 var bridgeServer = net.createServer();
 bridgeServer.listen(bridgePath);
 //
-// ghetto hookio shim
+// ghetto hookio shim until we iron out some domain socket bugs
 //
 var carapace = new EventEmitter();
+
 var bridge = new dnode({
   emit: function() {
     //
@@ -32,14 +33,26 @@ var bridge = new dnode({
 bridge.listen(bridgeServer);
 
 carapace.on('plugin',function(toRequire, done) {
-  require(toRequire)(carapace);
+  try {
+    require(toRequire)(carapace);
+  }
+  catch(e) {
+    if(done) return done(e);
+  }
+  if(done) return done();
+  return undefined;
 });
-
+var running = false;
 carapace.on('run', function(script, done) {
-  process.argv.splice(1,1,fs.realpathSync(require.resolve(path.join(process.cwd(),carapace.config.script))));
+  if(running) {
+    if(done) return done('Cannot spawn a new script, one is already running.');
+    return undefined;
+  }
+  running = true;
+  process.argv.splice(1,1,fs.realpathSync(require.resolve(path.join(process.cwd(),script))));
   require('module').Module._cache = {};
   //
   // Next tick to prevent a leak from arguments
   //
-  process.nextTick(function(){require('module').Module.runMain()});
-})
+  return process.nextTick(function(){require('module').Module.runMain()});
+});
