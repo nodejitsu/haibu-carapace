@@ -4,7 +4,7 @@
 //
 // Setup and bidirectional communication environment for processes
 //
-
+var libev = require('../build/default/libev');
 var path = require('path');
 var fs = require('fs');
 var net = require('net');
@@ -48,6 +48,7 @@ carapace.on('run', function(script, done) {
     if(done) return done('Cannot spawn a new script, one is already running.');
     return undefined;
   }
+  libev.Unref();
   running = true;
   process.argv.splice(1,1,fs.realpathSync(require.resolve(path.join(process.cwd(),script))));
   require('module').Module._cache = {};

@@ -9,6 +9,10 @@ require('dnode').connect(bridgePath, function(client, conn) {
     console.dir(arguments)
     client.emit('chroot:root','..', function() {
       client.emit('run', 'examples/server.js');
+      //
+      // Kill our connection to carapace (this connection will prevent carapace from closing due to IOWatchers)
+      //
+      conn.end();
     });
   })
 });
