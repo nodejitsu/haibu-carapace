@@ -9,12 +9,14 @@ It also provides a plugin system to ease development of applications that need t
 ## Example workflow
 
 On terminal one: open up a carapace.
+
 ```
 carapace ./test
 ```
 
 On terminal two: chroot the process.
 Then tell carapace to run a script *server.js* from where we were chrooted.
+
 ```
 //
 // Connect to the carapace
