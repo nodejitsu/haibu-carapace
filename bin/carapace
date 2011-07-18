@@ -1,65 +1,14 @@
 #!/usr/local/bin/node
 //
-// Carapace.js
+// Carapace bridge ...
 //
-// Setup and bidirectional communication environment for processes
+// bridge - port / path to make bridge server at
+// ... - argv not including the script
 //
-var libev = require('../build/default/libev');
+
+var carapace = require('../');
 var path = require('path');
-var fs = require('fs');
-var net = require('net');
-var EventEmitter = require('events').EventEmitter;
-var dnode = require('dnode');
-//
-// Carapace arguments are for the rooting environment
-//  * carapace.bridge
-//
-var bridgePath = path.resolve(process.argv.splice(2,1)[0]);
-var bridgeServer = net.createServer();
-bridgeServer.listen(bridgePath);
-//
-// ghetto hookio shim until we iron out some domain socket bugs
-//
-var carapace = new EventEmitter();
 
-var bridge = new dnode({
-  emit: function() {
-    //
-    // DO NOT STIP OFF THE ASYNC CALLBACK ON THE END
-    //
-    carapace.emit.apply(carapace,arguments);
-  }
-});
-bridge.listen(bridgeServer);
-bridgeServer.on('connection', function(conn) {
-  libev.Unref();
-  conn.on('close',function(){
-    libev.Ref();
-  })
-});
-
-carapace.on('plugin',function(toRequire, done) {
-  try {
-    require(toRequire)(carapace);
-  }
-  catch(e) {
-    if(done) return done(e);
-  }
-  if(done) return done();
-  return undefined;
-});
-var running = false;
-carapace.on('run', function(script, done) {
-  if(running) {
-    if(done) return done('Cannot spawn a new script, one is already running.');
-    return undefined;
-  }
-  libev.Unref();
-  running = true;
-  process.argv.splice(1,1,fs.realpathSync(require.resolve(path.join(process.cwd(),script))));
-  require('module').Module._cache = {};
-  //
-  // Next tick to prevent a leak from arguments
-  //
-  return process.nextTick(function(){require('module').Module.runMain()});
-});
+var bridgePath = path.resolve(process.argv[2]);
+var argv = process.argv.slice(3);
+carapace.wrap(bridgePath);

@@ -1,20 +1,28 @@
-var path = require('path');
 var carapace = require('../');
-var bridgePath = path.resolve(process.argv[2]);
-
-console.log('connecting to ' + bridgePath)
-require('dnode').connect(bridgePath, function(client, conn) {
-  console.log('loading plugin ' + carapace.plugins.chroot);
-  //
-  // Connections to Carapace do not keep it open!
-  //
-  conn.on('end',function(){
-    console.log('Carapace connection had ended.')
-  });
-  client.emit('plugin',carapace.plugins.chroot, function() {
-    console.log('plugin done')
-    client.emit('chroot:root','..', function() {
-      client.emit('run', 'examples/server.js');
+var path = require('path');
+var bridge = process.argv.splice(2,1)[0];
+carapace.wrap(bridge, function() {
+  carapace.emit('plugin',carapace.plugins.heartbeat, function(err) {
+    if(err) {
+      console.error(err.stack);
+      process.exit();
+    }
+    carapace.emit('plugin',carapace.plugins.chroot, function(err) {
+      if(err) {
+        console.error(err.stack);
+        process.exit();
+      }
+      carapace.emit('plugin',carapace.plugins.chdir, function(err) {
+        if(err) {
+          console.error(err.stack);
+          process.exit();
+        }
+        carapace.emit('chroot:root','./tobechrooted', function(err) {
+          carapace.emit('chdir:path','.', function(err) {
+            carapace.emit('run',['./server.js']);
+          });
+        });
+      });
     });
-  })
+  });
 });
