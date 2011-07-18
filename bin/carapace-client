@@ -1,0 +1,26 @@
+#!/usr/local/bin/node
+
+var path = require('path');
+var bridgePath = path.resolve(process.argv[2]);
+
+console.log('connecting to ' + bridgePath)
+require('dnode').connect(bridgePath, function(client, conn) {
+  console.log('connected');
+
+  carapace = client;
+  plugins = client.plugins;
+  emit = client.emit.bind(client);
+  on = client.on.bind(client);
+
+  console.log('');
+  console.log('REPL started');
+  console.log(' use carapace.*, plugins.*, on(..), and emit(..) to communicate with the carapace');
+  console.log('');
+  require('repl').start('carapace>');
+  
+  conn.on('end',function(){
+    console.log('carapace connection had ended.');
+    process.exit(0);
+  });
+});
+
