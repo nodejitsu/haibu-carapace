@@ -4,7 +4,7 @@ var path = require('path');
 var bridgePath = path.resolve(process.argv[2]);
 
 console.log('connecting to ' + bridgePath)
-require('dnode').connect(bridgePath, function(client, conn) {
+require('dnode').connect(bridgePath, function (client, conn) {
   console.log('connected');
 
   carapace = client;
@@ -18,7 +18,7 @@ require('dnode').connect(bridgePath, function(client, conn) {
   console.log('');
   require('repl').start('carapace>');
   
-  conn.on('end',function(){
+  conn.on('end', function () {
     console.log('carapace connection had ended.');
     process.exit(0);
   });

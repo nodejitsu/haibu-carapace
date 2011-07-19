@@ -1,4 +1,4 @@
-var server = require('http').createServer(function(req,res) {
+var server = require('http').createServer(function (req,res) {
   res.end('CWD: ' + process.cwd());
 });
 server.listen(1337);

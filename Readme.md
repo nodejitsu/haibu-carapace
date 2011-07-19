@@ -22,15 +22,15 @@ Then tell carapace to run a script *server.js* from where we were chrooted.
 // Connect to the carapace
 //
 var carapace = require('carapace');
-require('dnode').connect(__dirname + '/test', function(client, conn) {
+require('dnode').connect(__dirname + '/test', function (client, conn) {
   //
   // Tell the carapace we have a new plugin to be loaded
   //
-  client.emit('plugin',carapace.plugins.chroot, function() {
+  client.emit('plugin', carapace.plugins.chroot, function () {
     //
     // Tell carapace we have a new directory to use as root
     //
-    client.emit('chroot:root','..', function() {
+    client.emit('chroot:root', '..', function () {
       //
       // Tell carapace to run a script
       //
