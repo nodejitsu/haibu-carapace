@@ -1,5 +1,5 @@
 {
-  "name": "carapace",
+  "name": "haibu-carapace",
   "version": "0.1.0",
   "main": "lib/index.js",
   "dependencies": {
@@ -9,5 +9,8 @@
   "bin": {
     "carapace": "./bin/carapace",
     "carapace-client": "./bin/carapace-client"
+  },
+  "scripts": {
+    "install": "sh install"
   }
 }

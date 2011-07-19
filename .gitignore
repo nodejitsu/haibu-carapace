@@ -1,5 +1,6 @@
 node_modules
 build/
+*.node
 .DS_Store
 .lockScript
 .lock-wscript
