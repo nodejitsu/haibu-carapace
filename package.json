@@ -7,6 +7,9 @@
     "daemon": "0.3.x",
     "optimist": "0.2.x"
   },
+  "devDependencies": {
+    "vows": "0.5.x"
+  },
   "bin": {
     "carapace": "./bin/carapace",
     "carapace-client": "./bin/carapace-client"
