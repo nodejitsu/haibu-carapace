@@ -6,7 +6,7 @@
 // ... - argv not including the script
 //
 
-var carapace = require('../');
+var carapace = require('../lib/carapace');
 var path = require('path');
 
 var bridgePath = path.resolve(process.argv[2]);
