@@ -12,6 +12,6 @@
     "carapace-client": "./bin/carapace-client"
   },
   "scripts": {
-    "install": "sh install"
+    "preinstall" : "node-waf configure build"
   }
 }

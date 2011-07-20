@@ -1,4 +1,4 @@
-#include <node/ev/ev.h>
+#include <node/ev.h>
 #include <node/v8.h>
 
 using namespace v8;
@@ -16,7 +16,7 @@ Handle<Value> Ref(const Arguments &args) {
 
 extern "C" void init(Handle<Object> target) {
 	HandleScope scope;
-	target->Set(String::NewSymbol("Unref"),FunctionTemplate::New(Unref)->GetFunction());
-	target->Set(String::NewSymbol("Ref"),FunctionTemplate::New(Ref)->GetFunction());
+	target->Set(String::NewSymbol("unref"),FunctionTemplate::New(Unref)->GetFunction());
+	target->Set(String::NewSymbol("ref"),FunctionTemplate::New(Ref)->GetFunction());
 	scope.Close(target);
 }

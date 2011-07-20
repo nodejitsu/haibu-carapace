@@ -1,6 +1,7 @@
-node_modules
-build/
 *.node
 .DS_Store
 .lockScript
 .lock-wscript
+build/
+node_modules/
+npm-debug.log
