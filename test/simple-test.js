@@ -8,25 +8,12 @@
  
 var assert = require('assert'),
     vows = require('vows'),
+    helper = require('./helper/macros.js'),
     carapace = require('../lib/carapace');
+
+var PORT = 5050;
     
 vows.describe('carapace/simple').addBatch({
-  "When using haibu-carapace": {
-    "the listen() method": {
-      topic: function () {
-        var that = this;
-        
-        //
-        // This is a test workaround for `hook.io@0.5.1`
-        //
-        carapace.on('hook::listening', function () {
-          process.nextTick(that.callback.bind(null, null));
-        });
-        carapace.listen();
-      },
-      "should update the internal state of the carapace": function (_, name) {
-        assert.isTrue(carapace.listening);
-      }
-    }
-  }
+  "When using haibu-carapace":  helper.assertListen(carapace, PORT, {
+  })
 }).export(module);
