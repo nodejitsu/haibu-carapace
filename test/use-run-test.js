@@ -15,17 +15,16 @@ var PORT = 5050;
     
 vows.describe('carapace/use-plugins').addBatch({
   "When using haibu-carapace":  helper.assertListen(carapace, PORT, {
-    "use chdir, chroot" : helper.assertUse(carapace, ['chdir', 'chroot'], {
-      "to create the jail" : {
+    "load up chdir, chroot, heartbeat plugins" : helper.assertUse(carapace, ['chdir', 'chroot', 'heartbeat'], {
+      "and running the heartbeat plugin" : {
         topic : function () {
-          carapace.chroot('../examples/tobechrooted');
-          carapace.chdir('.');
-          return true;
+          carapace.on('carapace::heartbeat', this.callback.bind(null,null));
+          carapace.heartbeat();
         },
-        "without any errors" : function () {
-          assert.isTrue(true);
-        },
-        "in the in the jail, run `./server.js`" : helper.assertRun(carapace, ['./server.js'])
+        "should see a carapace::heartbeat event" : function (_, event, data) {
+          assert.isString(event);
+          assert.equal(event, 'carapace::heartbeat');
+        }
       }
     })
   })
