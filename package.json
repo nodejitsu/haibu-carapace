@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "lib/carapace.js",
   "dependencies": {
-    "dnode": "0.7.x",
+    "hook.io": "0.5.x",
     "daemon": "0.3.x",
     "eventemitter2": "0.2.x",
     "optimist": "0.2.x"
