@@ -8,7 +8,6 @@
 
 var assert = require('assert'),
     eyes = require('eyes');
-    carapace = require('../../lib/carapace');
 
 var macros = exports;
 
@@ -30,7 +29,7 @@ macros.assertListen = function (carapace, port, vows) {
       // Another work around for `hook.io@0.5.1`
       // because we aren't at carapace::listening, so it is false
       // 
-      assert.isFalse(carapace.listening);
+      assert.isFalse(instance.listening);
     }
   };
   
@@ -41,11 +40,32 @@ macros.assertUse = function (carapace, plugins, vows) {
   var context = {
     topic: function () {
       var instance = carapace;
-      carapace.use(plugins, this.callback.bind(null, null, instance));
+      if (typeof plugins === 'string') {
+        instance.use(instance.plugins[plugins], this.callback.bind(null, null, instance));
+      }
+      else {
+        //
+        // should be an array
+        // we have to do this because carapace, preloads these plugins
+        //
+        var pg = plugins.map(function map(plugin) {
+            return instance.plugins[plugin];
+            });
+        instance.use(pg, this.callback.bind(null,null,instance));
+      }
     },
-    "should have loaded all the plugins": function (_, instance) {
-      // todo
-      assert.isTrue(false);
+    "should have load the plugin(s)": function (_, instance) {
+      if (typeof plugins === 'string') {
+        assert.isString(plugins);
+        assert.isFunction(instance[plugins]);
+      }
+      else {
+        assert.isArray(plugins);
+        for (i in plugins) {
+          // hopefully nothing malicious in plugins
+          assert.isFunction(instance[plugins[i]]);
+        }
+      }
     }
   };
   

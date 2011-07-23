@@ -13,10 +13,10 @@ var assert = require('assert'),
 
 var PORT = 5050;
     
-vows.describe('carapace/simple').addBatch({
+vows.describe('carapace/use').addBatch({
   "When using haibu-carapace":  helper.assertListen(carapace, PORT, {
-    "and if we load up chdir plugins" : helper.assertUse(carapace, 'chdir', {
-      "we should be able to load more plugins" : helper.assertUse(carapace, ['chroot', 'heartbeat'], {})
+    "use chdir plugins" : helper.assertUse(carapace, 'chdir', {
+      "and use chroot and heartbeat" : helper.assertUse(carapace, ['chroot', 'heartbeat'])
     })
   })
 }).export(module);
