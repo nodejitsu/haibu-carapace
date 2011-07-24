@@ -72,18 +72,18 @@ macros.assertUse = function (carapace, plugins, vows) {
   return extendContext(context, vows);
 };
 
-macros.assertRun = function (carapace, target, vows) {
+macros.assertRun = function (carapace, script, argv, vows) {
   var context = {
     topic: function () {
       var instance = carapace;
       instance.on('carapace::running', this.callback.bind(null, null, instance));
-      instance.run(target);
+      instance.run(script, argv || []);
     },
     "should fire the `carapace::running` event": function (_, instance, name) {
       assert.equal(name, 'carapace::running');
     },
     "should rewrite process.argv transparently": function (_, instance, name) {
-      assert.equal(process.argv[1], target);
+      assert.equal(process.argv[1], script);
     }
   };
   

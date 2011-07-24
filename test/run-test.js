@@ -31,7 +31,7 @@ vows.describe('carapace/run').addBatch({
         "without any errors" : function () {
           assert.isTrue(true);
         },
-        "in the in the jail, run `./server.js`" : helper.assertRun(carapace, [script], {
+        "in the in the jail, run `./server.js`" : helper.assertRun(carapace, script, ['--foo', '--bar'], {
           "should set the correct exports on carapace._module": function (_, _) {
             assert.equal(carapace._module.exports.port, 1337);
           }
@@ -42,18 +42,12 @@ vows.describe('carapace/run').addBatch({
 }).addBatch({
   "should correctly start the HTTP server": {
     topic: function () {
-      console.dir({
-        host: 'localhost', 
-        port: carapace._module.exports.port,
-        path: '/'
-      });
       var that = this;
       http.get({
         host: 'localhost', 
         port: carapace._module.exports.port,
         path: '/'
       }, function () {
-        console.dir(arguments);
         that.callback.apply(that, arguments);
       });
       
@@ -64,7 +58,6 @@ vows.describe('carapace/run').addBatch({
       //exec('curl http://localhost:1337/', this.callback)
     },
     "that responds with a cwd in the chroot jail": function (err, stdout, stderr) {
-      console.dir(arguments);
       assert.isTrue(true);
     }
   }

@@ -6,9 +6,56 @@
 // ... - argv not including the script
 //
 
-var carapace = require('../lib/carapace');
-var path = require('path');
+var carapace = require('../lib/carapace'),
+    path = require('path');
+    
+//
+// Extract the carapace CLI arguments for this
+// process.
+//
+var argv = carapace.cli.argv(),
+    script = argv._[0];
 
-var bridgePath = path.resolve(process.argv[2]);
-var argv = process.argv.slice(3);
-carapace.wrap(bridgePath);
+//
+// Remark: Calling `carapace.listen()` with no
+// arguments will fall-back to the default `hook-*`
+// CLI options since 
+//
+/*carapace.listen(function () {
+  carapace.on('carapace::plugin::error', function (plugin, ex) {
+    //
+    // If any of the plugins have failed to load then short
+    // circuit this carapace process because it requested them all.
+    //
+    console.log('Error loading plugin: ' + plugin);
+    console.log(ex.message);
+    console.dir(ex.stack.split('\n'));
+    process.exit(1);
+  });
+  
+  var plugins = argv.plugins.map(function (plugin) {
+    return carapace.plugins[plugin];
+  });
+  
+  carapace.use(plugins, function () {
+    plugins.forEach(function (plugin) {
+      carapace[plugin](// plugin options from argv (if any) //);
+    });
+  
+    carapace.chroot('./tobechrooted');
+    carapace.chdir('.');
+    carapace.run(['./server.js']);
+  });  
+});*/
+
+var passthru = carapace.cli.extract();
+carapace.run(script, passthru, true, function () {
+  require('http').get({
+    host: 'localhost', 
+    port: carapace._module.exports.port,
+    path: '/'
+  }, function (res) {
+    res.on('data', function (data) {
+      console.log(data.toString());
+    })
+  });});
