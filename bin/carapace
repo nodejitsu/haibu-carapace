@@ -1,13 +1,8 @@
 #!/usr/local/bin/node
-//
-// Carapace bridge ...
-//
-// bridge - port / path to make bridge server at
-// ... - argv not including the script
-//
 
-var carapace = require('../lib/carapace'),
-    path = require('path');
+var path = require('path'),
+    async = require('async'),
+    carapace = require('../lib/carapace');
     
 //
 // Extract the carapace CLI arguments for this
@@ -16,46 +11,66 @@ var carapace = require('../lib/carapace'),
 var argv = carapace.cli.argv(),
     script = argv._[0];
 
+function onPluginError (plugin, ex) {
+  //
+  // If any of the plugins have failed to load then short
+  // circuit this carapace process because it requested them all.
+  //
+  console.log('Error loading plugin: ' + plugin);
+  console.log(ex.message);
+  console.dir(ex.stack.split('\n'));
+  process.exit(1);
+}
+
 //
 // Remark: Calling `carapace.listen()` with no
 // arguments will fall-back to the default `hook-*`
 // CLI options since 
 //
-/*carapace.listen(function () {
-  carapace.on('carapace::plugin::error', function (plugin, ex) {
-    //
-    // If any of the plugins have failed to load then short
-    // circuit this carapace process because it requested them all.
-    //
-    console.log('Error loading plugin: ' + plugin);
-    console.log(ex.message);
-    console.dir(ex.stack.split('\n'));
-    process.exit(1);
-  });
+carapace.listen(function () {
+  var passthru = carapace.cli.extract();
   
-  var plugins = argv.plugins.map(function (plugin) {
-    return carapace.plugins[plugin];
-  });
-  
-  carapace.use(plugins, function () {
-    plugins.forEach(function (plugin) {
-      carapace[plugin](// plugin options from argv (if any) //);
+  function configure (next) {
+    if (!Array.isArray(argv.plugin)) {
+      argv.plugin = [argv.plugin];
+    }
+    
+    //
+    // Listen for errors when loading plugins
+    //
+    carapace.on('carapace::plugin::error', onPluginError);
+    
+    var plugins = argv.plugin.map(function (plugin) { 
+      return carapace.plugins[plugin];
     });
+    
+    carapace.use(plugins, function () {
+      async.forEach(argv.plugin, function (plugin, next) {
+        if (carapace[plugin]) {
+          carapace[plugin](argv[plugin], function (err) {
+            return err ? onPluginError(plugin, err) : next();
+          });
+        }
+      }, next);      
+    });
+  }
   
-    carapace.chroot('./tobechrooted');
-    carapace.chdir('.');
-    carapace.run(['./server.js']);
-  });  
-});*/
-
-var passthru = carapace.cli.extract();
-carapace.run(script, passthru, true, function () {
-  require('http').get({
-    host: 'localhost', 
-    port: carapace._module.exports.port,
-    path: '/'
-  }, function (res) {
-    res.on('data', function (data) {
-      console.log(data.toString());
-    })
-  });});
+  function runAndReport () {
+    carapace.run(script, passthru, true, function () {
+      console.log('carapace has wrapped: ' + script);
+      
+      function logArray (array, msg, delim) {
+        return array && array.length 
+          ? console.log(msg + array.join(delim))
+          : null;
+      }
+      
+      logArray(passthru, 'with arguments: ', ' ');
+      logArray(Object.keys(carapace._module.exports), '  and exports: ', ', ');
+    });
+  }
+    
+  return argv.plugin
+    ? configure(runAndReport)
+    : runAndReport();
+});

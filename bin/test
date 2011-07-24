@@ -4,6 +4,7 @@ var spawn = require('child_process').spawn,
     path = require('path'),
     fs = require('fs'),
     async = require('async'),
+    findit = require('findit'),
     winston = require('winston').cli();
 
 //
@@ -11,15 +12,15 @@ var spawn = require('child_process').spawn,
 // and pass them through to the child
 //
 var testDir = path.join(__dirname, '..', 'test'),
-    tests = fs.readdirSync(testDir),
     args = process.argv.slice(2);
+    tests = findit.findSync(testDir);
 
 function streamChild (file, next) {
   if (!/-test\.js$/.test(file)) {
     return next();
   }
 
-  var child = spawn('vows', [file].concat(args), { cwd: testDir });
+  var child = spawn('vows', [file.replace(testDir, '')].concat(args), { cwd: testDir });
 
   winston.info('');
   winston.info('vows ' + file.magenta + ' ' + args.join(' ').yellow);

@@ -8,12 +8,11 @@
  
 var assert = require('assert'),
     vows = require('vows'),
-    helper = require('./helper/macros.js'),
-    carapace = require('../lib/carapace');
+    helper = require('../helper/macros.js'),
+    carapace = require('../../lib/carapace');
 
 var PORT = 5050;
     
-vows.describe('carapace/simple').addBatch({
-  "When using haibu-carapace":  helper.assertListen(carapace, PORT, {
-  })
+vows.describe('carapace/simple/listen').addBatch({
+  "When using haibu-carapace":  helper.assertListen(carapace, PORT)
 }).export(module);

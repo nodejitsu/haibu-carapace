@@ -1,3 +1,7 @@
+//
+// TODO: THIS EXAMPLE SCRIPT NEEDS TO BE REFACTORED FOR HOOK.IO
+//
+
 var path = require('path');
 var bridgePath = path.resolve(process.argv[2]);
 

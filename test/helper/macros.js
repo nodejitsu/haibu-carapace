@@ -7,29 +7,23 @@
  */
 
 var assert = require('assert'),
+    path = require('path'),
+    spawn = require('child_process').spawn,
     eyes = require('eyes');
+
+var carapaceBin = path.join(__dirname, '..', '..', 'bin', 'carapace');
 
 var macros = exports;
 
 macros.assertListen = function (carapace, port, vows) {
   var context = {
     topic: function () {
-      var instance = carapace,
-          that = this;
-      //
-      // TODO: change when hook.io v0.5.2 is out
-      //
-      instance.on('hook::listening', function runner() {
-        process.nextTick(that.callback.bind(null, null, instance));
-      });
-      instance.listen({ port: port });
+      var instance = carapace;
+      
+      instance.listen({ port: port }, this.callback.bind(this, null, instance));
     },
     "it should fire the `carapace::listening` event": function (_, instance, name) {
-      //
-      // Another work around for `hook.io@0.5.1`
-      // because we aren't at carapace::listening, so it is false
-      // 
-      assert.isFalse(instance.listening);
+      assert.isTrue(instance.listening);
     }
   };
   
@@ -42,30 +36,33 @@ macros.assertUse = function (carapace, plugins, vows) {
       var instance = carapace;
       if (typeof plugins === 'string') {
         instance.use(instance.plugins[plugins], this.callback.bind(null, null, instance));
+        return undefined;
       }
-      else {
-        //
-        // should be an array
-        // we have to do this because carapace, preloads these plugins
-        //
-        var pg = plugins.map(function map(plugin) {
-            return instance.plugins[plugin];
-            });
-        instance.use(pg, this.callback.bind(null,null,instance));
-      }
+
+      //
+      // should be an array
+      // we have to do this because carapace, preloads these plugins
+      //
+      var pg = plugins.map(function (plugin) {
+        return instance.plugins[plugin];
+      });
+      
+      instance.use(pg, this.callback.bind(null,null,instance));
     },
     "should have load the plugin(s)": function (_, instance) {
       if (typeof plugins === 'string') {
         assert.isString(plugins);
         assert.isFunction(instance[plugins]);
+        return; 
       }
-      else {
-        assert.isArray(plugins);
-        for (i in plugins) {
-          // hopefully nothing malicious in plugins
-          assert.isFunction(instance[plugins[i]]);
-        }
-      }
+
+      assert.isArray(plugins);
+      plugins.forEach(function (plugin) {
+        //
+        // Remark (drjackal): Hopefully nothing malicious in plugins...
+        //
+        assert.isFunction(instance[plugin]);
+      });
     }
   };
   
@@ -86,6 +83,23 @@ macros.assertRun = function (carapace, script, argv, vows) {
       assert.equal(process.argv[1], script);
     }
   };
+  
+  return extendContext(context, vows);
+};
+
+macros.assertSpawn = function (PORT, script, argv, vows) {
+  argv = argv.slice(0);
+  argv.push(script);
+  
+  var context = {
+    topic: function () {
+      var child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));
+      child.stdout.once('data', this.callback.bind(this, null, child));
+    },
+    "should respond with the proper wrapped script output": function (_, child, data) {
+      assert.isTrue(!!data.toString().indexOf('server.js'))
+    }
+  }
   
   return extendContext(context, vows);
 };

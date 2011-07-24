@@ -8,12 +8,12 @@
  
 var assert = require('assert'),
     vows = require('vows'),
-    helper = require('./helper/macros.js'),
-    carapace = require('../lib/carapace');
+    helper = require('../helper/macros.js'),
+    carapace = require('../../lib/carapace');
 
 var PORT = 5050;
     
-vows.describe('carapace/use-plugins').addBatch({
+vows.describe('carapace/simple/use-plugins').addBatch({
   "When using haibu-carapace":  helper.assertListen(carapace, PORT, {
     "load up chdir, chroot, heartbeat plugins" : helper.assertUse(carapace, ['chdir', 'chroot', 'heartbeat'], {
       "and running the heartbeat plugin" : {

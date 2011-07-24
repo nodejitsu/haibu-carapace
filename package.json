@@ -3,13 +3,14 @@
   "version": "0.1.0",
   "main": "lib/carapace.js",
   "dependencies": {
+    "async": "0.1.x",
     "daemon": "0.3.x",
     "eventemitter2": "0.2.x",
-    "hook.io": "0.5.x"
+    "hook.io": "0.5.x >=0.5.2"
   },
   "devDependencies": {
-    "async": "0.1.x",
     "eyes": "0.1.x",
+    "findit": "0.x.x",
     "winston": "0.3.x",
     "request": "2.0.x",
     "vows": "0.5.x"
@@ -19,6 +20,7 @@
     "carapace-client": "./bin/carapace-client"
   },
   "scripts": {
-    "preinstall" : "node-waf configure build"
+    "preinstall" : "node-waf configure build",
+    "test": "sudo bin/test --spec"
   }
 }

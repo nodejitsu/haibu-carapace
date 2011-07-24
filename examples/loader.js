@@ -14,7 +14,7 @@ carapace.listen(function () {
     carapace.plugins.chroot, 
     carapace.plugins.chdir
   ], function () {
-    carapace.chroot('./tobechrooted');
+    carapace.chroot('./chroot-jail');
     carapace.chdir('.');
     carapace.run(['./server.js']);
   });  
