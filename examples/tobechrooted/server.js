@@ -1,5 +1,8 @@
-var server = require('http').createServer(function (req,res) {
+
+var port   = exports.port   = 1337;
+var server = exports.server = require('http').createServer(function (req,res) {
+  console.dir('INCOMING REQUEST! DUCK!');
   res.end('CWD: ' + process.cwd());
 });
-server.listen(1337);
-console.dir('server running on 1337')
+
+server.listen(port);

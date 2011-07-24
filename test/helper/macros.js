@@ -81,6 +81,9 @@ macros.assertRun = function (carapace, target, vows) {
     },
     "should fire the `carapace::running` event": function (_, instance, name) {
       assert.equal(name, 'carapace::running');
+    },
+    "should rewrite process.argv transparently": function (_, instance, name) {
+      assert.equal(process.argv[1], target);
     }
   };
   
