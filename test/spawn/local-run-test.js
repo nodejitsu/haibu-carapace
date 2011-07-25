@@ -25,12 +25,12 @@ vows.describe('carapace/spawn/local').addBatch({
       "should set the correct exports on carapace._module": function (_, _) {
         assert.equal(carapace._module.exports.port, 1337);
       },
-      "should emit the `carapace::port` event": {
+      "should emit the `*::port` event": {
         topic: function () {
-          carapace.on('carapace::port', this.callback.bind(this, null));
+          carapace.on('*::port', this.callback.bind(this, null));
         },
         "with the correct port": function (err, event, port) {
-          assert.equal(event, 'carapace::port');
+          assert.equal(event, '*::port');
           assert.equal(port, 1337);
         },
         "should correctly start the HTTP server": {

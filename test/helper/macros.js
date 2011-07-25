@@ -10,6 +10,7 @@ var assert = require('assert'),
     path = require('path'),
     spawn = require('child_process').spawn,
     eyes = require('eyes'),
+    request = require('request'),
     carapace = require('../../lib/carapace');
 
 var carapaceBin = path.join(__dirname, '..', '..', 'bin', 'carapace');
@@ -19,7 +20,7 @@ var macros = exports;
 macros.assertListen = function (port, vows) {
   var context = {
     topic: function () {
-      carapace.listen({ port: port }, this.callback.bind(this, null));
+      carapace.listen({ 'hook-port': port }, this.callback.bind(this, null));
     },
     "it should fire the `carapace::listening` event": function (_, name) {
       assert.isTrue(carapace.listening);
@@ -102,8 +103,47 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
 };
 
 macros.assertParentSpawn = function (PORT, script, argv, vows) {
+  argv = argv.slice(0);
+  argv.push(script);
   
-}
+  var context = {
+    "when spawning a child carapace": {
+      topic: function () {
+        var that = this,
+            child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));
+        
+        carapace.on('*::port', function (source, ev, port) { 
+          if (port === 1337) {
+            console.dir(arguments);
+            that.callback(null, source, ev, port);
+          }
+        });        
+      },
+      "should emit the `*::port` event": {
+        topic: function () {
+          console.dir(arguments);
+          this.callback.apply(this, arguments)
+        },
+        "with the correct port": function (err, event, port) {
+          console.dir(arguments);
+          assert.equal(event, '*::port');
+          assert.equal(port, 1337);
+        },
+        "should correctly start the HTTP server": {
+          topic: function () {
+            request({ uri: 'http://localhost:1337' }, this.callback);      
+          },
+          "that responds with a cwd": function (err, res, body) {
+            assert.equal(body, '/');
+          }
+        }
+      }
+    }
+  };
+  
+  context = extendContext(context, vows);
+  return macros.assertListen(PORT, context);
+};
 
 function extendContext (context, vows) {
   if (vows) {
