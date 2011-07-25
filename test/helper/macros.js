@@ -114,18 +114,15 @@ macros.assertParentSpawn = function (PORT, script, argv, vows) {
         
         carapace.on('*::port', function (source, ev, port) { 
           if (port === 1337) {
-            console.dir(arguments);
             that.callback(null, source, ev, port);
           }
         });        
       },
       "should emit the `*::port` event": {
-        topic: function () {
-          console.dir(arguments);
-          this.callback.apply(this, arguments)
+        topic: function (source, ev, port) {
+          this.callback(null, source, ev, port);
         },
-        "with the correct port": function (err, event, port) {
-          console.dir(arguments);
+        "with the correct port": function (err, source, event, port) {
           assert.equal(event, '*::port');
           assert.equal(port, 1337);
         },
