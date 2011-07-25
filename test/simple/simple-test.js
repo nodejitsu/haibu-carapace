@@ -14,5 +14,5 @@ var assert = require('assert'),
 var PORT = 5050;
     
 vows.describe('carapace/simple/listen').addBatch({
-  "When using haibu-carapace":  helper.assertListen(carapace, PORT)
+  "When using haibu-carapace":  helper.assertListen(PORT)
 }).export(module);

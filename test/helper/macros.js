@@ -9,33 +9,31 @@
 var assert = require('assert'),
     path = require('path'),
     spawn = require('child_process').spawn,
-    eyes = require('eyes');
+    eyes = require('eyes'),
+    carapace = require('../../lib/carapace');
 
 var carapaceBin = path.join(__dirname, '..', '..', 'bin', 'carapace');
 
 var macros = exports;
 
-macros.assertListen = function (carapace, port, vows) {
+macros.assertListen = function (port, vows) {
   var context = {
     topic: function () {
-      var instance = carapace;
-      
-      instance.listen({ port: port }, this.callback.bind(this, null, instance));
+      carapace.listen({ port: port }, this.callback.bind(this, null));
     },
-    "it should fire the `carapace::listening` event": function (_, instance, name) {
-      assert.isTrue(instance.listening);
+    "it should fire the `carapace::listening` event": function (_, name) {
+      assert.isTrue(carapace.listening);
     }
   };
   
   return extendContext(context, vows);
 };
 
-macros.assertUse = function (carapace, plugins, vows) {
+macros.assertUse = function (plugins, vows) {
   var context = {
     topic: function () {
-      var instance = carapace;
       if (typeof plugins === 'string') {
-        instance.use(instance.plugins[plugins], this.callback.bind(null, null, instance));
+        carapace.use(carapace.plugins[plugins], this.callback.bind(this, null));
         return undefined;
       }
 
@@ -44,15 +42,15 @@ macros.assertUse = function (carapace, plugins, vows) {
       // we have to do this because carapace, preloads these plugins
       //
       var pg = plugins.map(function (plugin) {
-        return instance.plugins[plugin];
+        return carapace.plugins[plugin];
       });
       
-      instance.use(pg, this.callback.bind(null,null,instance));
+      carapace.use(pg, this.callback.bind(null, null));
     },
-    "should have load the plugin(s)": function (_, instance) {
+    "should have load the plugin(s)": function () {
       if (typeof plugins === 'string') {
         assert.isString(plugins);
-        assert.isFunction(instance[plugins]);
+        assert.isFunction(carapace[plugins]);
         return; 
       }
 
@@ -61,7 +59,7 @@ macros.assertUse = function (carapace, plugins, vows) {
         //
         // Remark (drjackal): Hopefully nothing malicious in plugins...
         //
-        assert.isFunction(instance[plugin]);
+        assert.isFunction(carapace[plugin]);
       });
     }
   };
@@ -69,17 +67,16 @@ macros.assertUse = function (carapace, plugins, vows) {
   return extendContext(context, vows);
 };
 
-macros.assertRun = function (carapace, script, argv, vows) {
+macros.assertRun = function (script, argv, vows) {
   var context = {
     topic: function () {
-      var instance = carapace;
-      instance.on('carapace::running', this.callback.bind(null, null, instance));
-      instance.run(script, argv || []);
+      carapace.on('carapace::running', this.callback.bind(this, null));
+      carapace.run(script, argv || []);
     },
-    "should fire the `carapace::running` event": function (_, instance, name) {
+    "should fire the `carapace::running` event": function (_, name) {
       assert.equal(name, 'carapace::running');
     },
-    "should rewrite process.argv transparently": function (_, instance, name) {
+    "should rewrite process.argv transparently": function (_, name) {
       assert.equal(process.argv[1], script);
     }
   };

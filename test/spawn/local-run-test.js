@@ -20,8 +20,8 @@ var PORT = 5050;
 var script = path.join(__dirname, '..', '..', 'examples', 'chroot-jail', 'server.js');
     
 vows.describe('carapace/spawn/local').addBatch({
-  "When using haibu-carapace": helper.assertListen(carapace, PORT, {
-    "and running `./server.js` with no plugins": helper.assertRun(carapace, script, null, {
+  "When using haibu-carapace": helper.assertListen(PORT, {
+    "and running `./server.js` with no plugins": helper.assertRun(script, null, {
       "should set the correct exports on carapace._module": function (_, _) {
         assert.equal(carapace._module.exports.port, 1337);
       },
