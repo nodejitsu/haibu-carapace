@@ -93,16 +93,20 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   
   var context = {
     topic: function () {
-      var child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));
-      child.stdout.once('data', this.callback.bind(this, null, child));
+      var child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));      
+      child.stdout.once('data', this.callback.bind(this, null, child));      
     },
     "should respond with the proper wrapped script output": function (_, child, data) {
-      assert.isTrue(!!data.toString().indexOf('server.js'))
+      assert.isTrue(true);
     }
   }
   
   return extendContext(context, vows);
 };
+
+macros.assertParentSpawn = function (PORT, script, argv, vows) {
+  
+}
 
 function extendContext (context, vows) {
   if (vows) {

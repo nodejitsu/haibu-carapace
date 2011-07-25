@@ -24,16 +24,24 @@ vows.describe('carapace/spawn/local').addBatch({
     "and running `./server.js` with no plugins": helper.assertRun(carapace, script, null, {
       "should set the correct exports on carapace._module": function (_, _) {
         assert.equal(carapace._module.exports.port, 1337);
+      },
+      "should emit the `carapace::port` event": {
+        topic: function () {
+          carapace.on('carapace::port', this.callback.bind(this, null));
+        },
+        "with the correct port": function (err, event, port) {
+          assert.equal(event, 'carapace::port');
+          assert.equal(port, 1337);
+        },
+        "should correctly start the HTTP server": {
+          topic: function () {
+            request({ uri: 'http://localhost:' + carapace._module.exports.port }, this.callback);      
+          },
+          "that responds with a cwd": function (err, res, body) {
+            assert.equal(body, process.cwd());
+          }
+        }
       }
     })
   })
-}).addBatch({
-  "should correctly start the HTTP server": {
-    topic: function () {
-      request({ uri: 'http://localhost:' + carapace._module.exports.port }, this.callback);      
-    },
-    "that responds with a cwd": function (err, res, body) {
-      assert.equal(body, path.join(__dirname, '..'));
-    }
-  }
 }).export(module);

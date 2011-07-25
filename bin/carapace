@@ -27,7 +27,7 @@ function onPluginError (plugin, ex) {
 // arguments will fall-back to the default `hook-*`
 // CLI options since 
 //
-carapace.listen(function () {
+carapace.start(function () {
   var passthru = carapace.cli.extract();
   
   function configure (next) {
