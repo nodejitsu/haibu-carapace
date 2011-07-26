@@ -115,11 +115,13 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
         var that = this,
             child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));
         
-        carapace.on('*::port', function (source, ev, port) { 
-          if (port === 1337) {
+        carapace.on('*::port', function onPort (source, ev, port) {
+          if (port && port !== carapace['hook-port']) {
+            that.port = port;
             that.callback(null, source, ev, port);
+            carapace.removeListener('*::port', onPort);
           }
-        });        
+        });
       },
       "should emit the `*::port` event": {
         topic: function (source, ev, port) {
@@ -127,11 +129,12 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
         },
         "with the correct port": function (err, source, event, port) {
           assert.equal(event, '*::port');
-          assert.equal(port, 1337);
+          assert.equal(port, this.port);
+          assert.notEqual(port, carapace['hook-port'])
         },
         "should correctly start the HTTP server": {
           topic: function () {
-            request({ uri: 'http://localhost:1337' }, this.callback);      
+            request({ uri: 'http://localhost:' + this.port }, this.callback);
           },
           "that responds with a cwd": function (err, res, body) {
             assert.equal(body, cwd);
@@ -141,8 +144,7 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
     }
   };
   
-  context = extendContext(context, vows);
-  return macros.assertListen(PORT, context);
+  return extendContext(context, vows);
 };
 
 function extendContext (context, vows) {

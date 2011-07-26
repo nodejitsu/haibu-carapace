@@ -21,5 +21,7 @@ var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
     PORT = 5060;
     
 vows.describe('carapace/run').addBatch({
-  "When using haibu-carapace": helper.assertParentSpawn(PORT, script, argv, '/')
+  "When using haibu-carapace": helper.assertListen(PORT, {
+    "spawning a child carapace in a chroot jail": helper.assertParentSpawn(PORT, script, argv, '/')
+  })
 }).export(module);
