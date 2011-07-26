@@ -1,42 +1,125 @@
-# Carapace
+# Haibu-Carapace
 
-## What is carapace
+Haibu Drone's Little Shell
+## What is Carapace
 
-Carapace is an in process wrapper for Node.js applications.
-It provides a bridge for setting up applications and extended communications.
-It also provides a plugin system to ease development of applications that need to be private.
+Carapace is an seamless process wrapper for Node.js applications that is part of the [Haibu][1] Network.
+Carapace also provides a [Hook.IO][2] based plugin system to simply deployment and developement of applications.
+## What can I do with Carapace?
 
-## Example workflow
+By utilizing Carapace you can automate deployment of applications into a custom environement.
+Combining Carapace with the [Forever][3] Daemon can allow you run the application in the envrionment indefinetly.
+## Installation
 
-On terminal one: open up a carapace.
-
+### Installing npm (node package manager)
+```shell
+curl http://npmjs.org/install.sh | sh
 ```
-carapace ./test
+
+### Installing carapace
+```shell
+[sudo] npm install carapace
 ```
 
-On terminal two: chroot the process.
-Then tell carapace to run a script *server.js* from where we were chrooted.
-
+## Example(s)
+### Chroot Jailed web-server (using the script)
+```shell
+# run the included shell script in a terminal
+sudo ./examples/jailedserver
+# then on another terminal poke the server using `curl` and `watch`
+watch 'curl http://localhost:1337'
 ```
-//
-// Connect to the carapace
-//
-var carapace = require('carapace');
-require('dnode').connect(__dirname + '/test', function (client, conn) {
-  //
-  // Tell the carapace we have a new plugin to be loaded
-  //
-  client.emit('plugin', carapace.plugins.chroot, function () {
-    //
-    // Tell carapace we have a new directory to use as root
-    //
-    client.emit('chroot:root', '..', function () {
-      //
-      // Tell carapace to run a script
-      //
-      client.emit('run', 'server.js');
+
+### Chroot Jailed Web-server (as an require)
+code is available in `./examples/jailer.js` and must be ran with **superuser privileges**
+
+```javascript
+
+var carapace = require('../lib/carapace');
+
+var script = 'server.js',
+    hookOpts = {
+      'debug' : false,
+      'hook-port' :  5061
+    },
+    scriptPort = 31337;
+
+carapace.listen( hookOpts,function () {
+  carapace.on('carapace::plugin::error', function (plugin, ex) {
+    console.log('Error loading plugin: ' + plugin);
+    console.log(ex.message);
+    console.dir(ex.stack.split('\n'))
+  });
+
+  carapace.use([
+    carapace.plugins.heartbeat, 
+    carapace.plugins.chroot, 
+    carapace.plugins.chdir
+  ], function () {
+    carapace.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
+    carapace.chdir('.');
+    carapace.run(script, ['--port', scriptPort], function afterRun() {
+      carapace.heartbeat(function () {
+        console.log('bump'.red);
+      },1000);
+      console.log(script.yellow + ' running on port '.grey + scriptPort.toString().green);
     });
-  })
+  });  
 });
 
 ```
+```shell
+# Run the above code in a terminal with
+sudo node ./examples/jailer.js
+# Poke the server in another terminal with
+watch 'curl http://localhost:31337'
+```
+
+## Carapace CLI Options
+
+`carapace [hook-options] --plugin [plugin] --[plugin] [options] application [options]`
+
+#### *Carapace's Plugin Manager Options*
+`--hook-port [port]`
+`--hook-host [hostname]`
+
+Carapace's Plugin Manager's Listening port/hostname
+
+#### *Plugins*
+`--plugin [plugin]`
+
+Plugin to use with the carapace instance
+
+#### *Plugin Options*
+`--[plugin] [options]`
+
+Option to be passed to the [plugin]
+
+#### *Application & Application's Options*
+`[application] [application's CLI options]`
+
+Any options that isn't consumed by the Carapace will automatically be passed to the application
+
+## Default Plugins
+List of known plugins, and options (if any) used by them
+
+* chroot - directory to rebind as root directory '/'
+* chdir - directory to change into 
+* heartbeat - time in micro-seconds between 'carapace::heartbeat' events
+
+## Run Tests
+All of the `carapace` tests are written in [vows][4]
+
+<pre>
+npm test
+or
+sudo ./bin/test --spec
+</pre>
+
+#### Author: [Nodejitsu Inc.](http://www.nodejitsu.com)
+#### Maintainers: [Charlie Robbins](https://github.com/indexzero),  [Bradley Meck](https://github.com/bmeck),  [Jameson Lee](https://github.com/drjackal)
+
+[1]:https://github.com/nodejitsu/haibu
+[2]:https://github.com/hookio/hook.io
+[3]:https://github.com/indexzero/forever
+[4]:https://github.com/cloudhead/vows
