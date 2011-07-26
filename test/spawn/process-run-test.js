@@ -33,6 +33,7 @@ vows.describe('carapace/run/process').addBatch({
         },
         "that responds with a cwd inside the chroot jail": function (err, res, body) {
           assert.isNull(err);
+          assert.equal(res.statusCode, 200);
           assert.equal(body, process.cwd());
         }
       }

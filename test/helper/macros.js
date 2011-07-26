@@ -92,18 +92,12 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   var context = {
     topic: function () {
       var that = this,
-          child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));      
+          child = spawn(carapaceBin, ['--hook-port', PORT, script].concat(argv));      
       
-      child.stdout.once('data', function () {
-        //
-        // Remark: Shouldnt have to do a settimeout here...
-        //
-        setTimeout(function () {
-          that.callback(null, child);
-        }, 100);      
-      });
+      child.stdout.once('data', that.callback.bind(null, null, child));
     },
     "should respond with the proper wrapped script output": function (_, child, data) {
+      assert.notEqual(data.toString().indexOf(script), -1);
       assert.isTrue(true);
     }
   }
