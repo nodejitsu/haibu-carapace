@@ -1,5 +1,4 @@
-var carapace = require('../lib/carapace'),
-    colors = require('colors');
+var carapace = require('../lib/carapace');
 
 var script = 'server.js',
     hookOpts = {
@@ -26,7 +25,7 @@ carapace.listen( hookOpts,function () {
       carapace.heartbeat(function () {
         console.log('bump'.red);
       },1000);
-      console.log(script.yellow + ' running on port '.grey + scriptPort.toString().green);
+      console.log(script+ ' running on port '+ scriptPort.toString());
     });
   });  
 });
