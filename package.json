@@ -1,7 +1,7 @@
 {
   "name": "haibu-carapace",
-  "version": "0.1.0",
   "main": "lib/carapace.js",
+  "version": "0.1.0",
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.3.x",
