@@ -45,7 +45,7 @@ carapace.start(function () {
     });
     
     carapace.use(plugins, function () {
-      async.forEach(argv.plugin, function (plugin, next) {
+      async.forEachSeries(argv.plugin, function (plugin, next) {
         if (carapace[plugin]) {
           carapace[plugin](argv[plugin], function (err) {
             return err ? onPluginError(plugin, err) : next();
