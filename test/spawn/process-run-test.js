@@ -16,11 +16,11 @@ var assert = require('assert'),
     carapace = require('../../lib/carapace');
 
 var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
-    script =  'server.js',
-    argv = ['--plugin', 'chroot', '--plugin', 'chdir', '--chroot', jail, '--chdir', '/'],
+    script =  path.join(jail, 'server.js'),
+    argv = [],
     PORT = 5060;
     
-vows.describe('carapace/run').addBatch({
+vows.describe('carapace/run/process').addBatch({
   "When using haibu-carapace": {
     "and spawning `/.server.js` in a separate process": helper.assertSpawn(PORT, script, argv, {
       "should correctly start the HTTP server": {
@@ -33,7 +33,7 @@ vows.describe('carapace/run').addBatch({
         },
         "that responds with a cwd inside the chroot jail": function (err, res, body) {
           assert.isNull(err);
-          assert.equal(body, '/');
+          assert.equal(body, process.cwd());
         }
       }
     })

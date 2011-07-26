@@ -91,8 +91,17 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   
   var context = {
     topic: function () {
-      var child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));      
-      child.stdout.once('data', this.callback.bind(this, null, child));      
+      var that = this,
+          child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));      
+      
+      child.stdout.once('data', function () {
+        //
+        // Remark: Shouldnt have to do a settimeout here...
+        //
+        setTimeout(function () {
+          that.callback(null, child);
+        }, 100);      
+      });
     },
     "should respond with the proper wrapped script output": function (_, child, data) {
       assert.isTrue(true);
@@ -102,7 +111,7 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   return extendContext(context, vows);
 };
 
-macros.assertParentSpawn = function (PORT, script, argv, vows) {
+macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
   argv = argv.slice(0);
   argv.push(script);
   
@@ -131,7 +140,7 @@ macros.assertParentSpawn = function (PORT, script, argv, vows) {
             request({ uri: 'http://localhost:1337' }, this.callback);      
           },
           "that responds with a cwd": function (err, res, body) {
-            assert.equal(body, '/');
+            assert.equal(body, cwd);
           }
         }
       }
