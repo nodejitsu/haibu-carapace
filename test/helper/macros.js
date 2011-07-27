@@ -98,7 +98,6 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
     },
     "should respond with the proper wrapped script output": function (_, child, data) {
       assert.notEqual(data.toString().indexOf(script), -1);
-      assert.isTrue(true);
     }
   }
   
