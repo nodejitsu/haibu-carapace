@@ -4,11 +4,11 @@ Haibu Drone's Little Shell
 ## What is Carapace
 
 Carapace is an seamless process wrapper for Node.js applications that is part of the [Haibu][1] Network.
-Carapace also provides a [Hook.IO][2] based plugin system to simply deployment and developement of applications.
+Carapace also provides a [Hook.IO][2] based plugin system to simply deployment and development of applications.
 ## What can I do with Carapace?
 
-By utilizing Carapace you can automate deployment of applications into a custom environement.
-Combining Carapace with the [Forever][3] Daemon can allow you run the application in the envrionment indefinetly.
+By utilizing Carapace you can automate deployment of applications into a custom environment.
+Combining Carapace with the [Forever][3] Daemon can allow you run the application in the environment indefinitely.
 ## Installation
 
 ### Installing npm (node package manager)
