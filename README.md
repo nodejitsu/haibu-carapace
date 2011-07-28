@@ -3,11 +3,11 @@
 Haibu Drone's Little Shell
 ## What is Carapace
 
-Carapace is an seamless process wrapper for Node.js applications that is part of the [Haibu][1] Network.
-Carapace also provides a [Hook.IO][2] based plugin system to simply deployment and development of applications.
+Carapace is an process wrapper for Node.js applications that is part of the [Haibu][1] Network.
+Carapace also provides a [Hook.IO][2] based plugin system to simplify deployment and development of applications.
 ## What can I do with Carapace?
 
-By utilizing Carapace you can automate deployment of applications into a custom environment.
+By utilizing Carapace you can help automate deployments of applications into a custom environment.
 Combining Carapace with the [Forever][3] Daemon can allow you run the application in the environment indefinitely.
 ## Installation
 
@@ -30,7 +30,7 @@ sudo ./examples/jailedserver
 watch 'curl http://localhost:1337'
 ```
 
-### Chroot Jailed Web-server (as an require)
+### Chroot Jailed Web-server (as a require)
 code is available in `./examples/jailer.js` and must be ran with **superuser privileges**
 
 ```javascript
