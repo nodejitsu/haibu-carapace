@@ -117,27 +117,28 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
         carapace.on('*::port', function onPort (source, ev, port) {
           if (port && port !== carapace['hook-port']) {
             that.port = port;
-            that.callback(null, source, ev, port);
+            that.callback(null, source, ev, port, child);
             carapace.removeListener('*::port', onPort);
           }
         });
       },
       "should emit the `*::port` event": {
-        topic: function (source, ev, port) {
-          this.callback(null, source, ev, port);
+        topic: function (source, ev, port, child) {
+          this.callback(null, source, ev, port, child);
         },
-        "with the correct port": function (err, source, event, port) {
+        "with the correct port": function (err, source, event, port, child) {
           assert.equal(event, '*::port');
           assert.equal(port, this.port);
           assert.notEqual(port, carapace['hook-port'])
         },
         "should correctly start the HTTP server": {
-          topic: function () {
-            request({ uri: 'http://localhost:' + this.port }, this.callback);
+          topic: function (_,_,_,child) {
+            request({ uri: 'http://localhost:' + this.port }, this.callback.bind(null, null, child));
           },
-          "that responds with a cwd": function (err, res, body) {
+          "that responds with a cwd": function (_, child, err, res, body) {
+            child.kill();
             assert.equal(body, cwd);
-          }
+          },
         }
       }
     }
