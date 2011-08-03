@@ -18,12 +18,12 @@ vows.describe('carapace/simple/use-plugins').addBatch({
     "load up chdir, chroot, heartbeat plugins" : helper.assertUse(['chdir', 'chroot', 'heartbeat'], {
       "and running the heartbeat plugin" : {
         topic : function () {
-          carapace.on('carapace::heartbeat', this.callback.bind(null,null));
+          carapace.on('carapace::heartbeat', this.callback.bind(carapace, null));
           carapace.heartbeat();
         },
         "should see a carapace::heartbeat event" : function (_, event, data) {
-          assert.isString(event);
-          assert.equal(event, 'carapace::heartbeat');
+          assert.isString(carapace.event);
+          assert.equal(carapace.event, 'carapace::heartbeat');
         }
       }
     })
