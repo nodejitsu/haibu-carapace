@@ -124,13 +124,13 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
           assert.notEqual(info.port, carapace['hook-port'])
         },
         "should correctly start the HTTP server": {
-          topic: function (_,_,_,child) {
+          topic: function (_, _, _, child) {
             request({ uri: 'http://localhost:' + this.port }, this.callback.bind(null, null, child));
           },
           "that responds with a cwd": function (_, child, err, res, body) {
             child.kill();
             assert.equal(body, cwd);
-          },
+          }
         }
       }
     }

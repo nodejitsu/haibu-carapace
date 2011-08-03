@@ -11,14 +11,14 @@ var path = require('path'),
 var argv = carapace.cli.argv(),
     script = argv._[0];
 
-function onPluginError (plugin, ex) {
+function onPluginError (info) {
   //
   // If any of the plugins have failed to load then short
   // circuit this carapace process because it requested them all.
   //
-  console.log('Error loading plugin: ' + plugin);
-  console.log(ex.message);
-  console.dir(ex.stack.split('\n'));
+  console.log('Error loading plugin: ' + info.plugin);
+  console.log(info.error.message);
+  console.dir(info.error.stack.split('\n'));
   process.exit(1);
 }
 
@@ -45,12 +45,24 @@ carapace.start(function () {
     });
     
     carapace.use(plugins, function () {
-      async.forEachSeries(argv.plugin, function (plugin, next) {
-        if (carapace[plugin]) {
-          carapace[plugin](argv[plugin], function (err) {
-            return err ? onPluginError(plugin, err) : next();
+      var names = argv.plugin.map(function (plugin) {
+        return path.basename(plugin, '.js');
+      })
+      
+      async.forEachSeries(names, function (plugin, next) {
+        if (!carapace[plugin]) {
+          return onPluginError({
+            plugin: plugin,
+            error: new Error('No plugin `' + plugin + '` was found after loading.')
           });
         }
+
+        carapace[plugin](argv[plugin], function (err) {
+          return !err ? next() : onPluginError({
+            plugin: plugin, 
+            error: err
+          });
+        });
       }, next);      
     });
   }
