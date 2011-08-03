@@ -41,7 +41,7 @@ carapace.start(function () {
     carapace.on('carapace::plugin::error', onPluginError);
     
     var plugins = argv.plugin.map(function (plugin) { 
-      return carapace.plugins[plugin];
+      return carapace.load(plugin);
     });
     
     carapace.use(plugins, function () {
