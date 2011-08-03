@@ -45,10 +45,10 @@ var script = 'server.js',
     scriptPort = 31337;
 
 carapace.listen( hookOpts,function () {
-  carapace.on('carapace::plugin::error', function (plugin, ex) {
-    console.log('Error loading plugin: ' + plugin);
-    console.log(ex.message);
-    console.dir(ex.stack.split('\n'))
+  carapace.on('carapace::plugin::error', function (info) {
+    console.log('Error loading plugin: ' + info.plugin);
+    console.log(info.error.message);
+    console.dir(info.error.stack.split('\n'))
   });
 
   carapace.use([
