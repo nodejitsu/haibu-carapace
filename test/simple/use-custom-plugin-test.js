@@ -16,8 +16,8 @@ var PORT = 5050;
 vows.describe('carapace/simple/use-custom-plugin').addBatch({
   "When using haibu-carapace":  helper.assertListen(PORT, {
     "a custom plugin" : {
-      //"with an absolute path": helper.assertUse(path.join(__dirname, '..', 'fixtures', 'custom.js')),
-      "with a relative path": helper.assertUse('../fixtures/relative.js')
+      "with an absolute path": helper.assertUse([path.join(__dirname, '..', 'fixtures', 'custom.js')]),
+      //"with a relative path": helper.assertUse('../fixtures/relative.js')
     }
   })
 }).export(module);

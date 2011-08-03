@@ -31,42 +31,27 @@ macros.assertListen = function (port, vows) {
 };
 
 macros.assertUse = function (plugins, vows) {
-  var names = typeof plugins === 'string'
-    ? path.basename(plugins, '.js')
-    : plugins.map(function (p) { return path.basename(p, '.js') });
+  var names = plugins.map(function (p) { return path.basename(p, '.js') });
   
   var context = {
     topic: function () {
-      if (typeof plugins === 'string') {
-        console.dir(plugins);
-        carapace.load(plugins);
-        carapace.use(carapace.plugins[names], this.callback.bind(this, null));
-        return undefined;
-      }
-
       //
       // should be an array
       // we have to do this because carapace, preloads these plugins
       //
-      var pg = plugins.map(function (plugin) {
+      var scripts = plugins.map(function (plugin) {
         return carapace.load(plugin);
       });
       
-      carapace.use(pg, this.callback.bind(null, null));
+      carapace.use(scripts, this.callback.bind(null, null));
     },
     "should have load the plugin(s)": function () {
-      if (typeof plugins === 'string') {
-        assert.isString(names);
-        assert.isFunction(carapace[names]);
-        return; 
-      }
-
       assert.isArray(plugins);
-      plugins.forEach(function (plugin) {
+      names.forEach(function (name) {
         //
         // Remark (drjackal): Hopefully nothing malicious in plugins...
         //
-        assert.isFunction(carapace[plugin]);
+        assert.isFunction(carapace[name]);
       });
     }
   };
