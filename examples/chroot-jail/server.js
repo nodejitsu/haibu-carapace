@@ -13,8 +13,7 @@ if (process.argv.length === 4) {
 }
 
 // start the http server
-server = require('http').createServer(function (req,res) {
-  console.dir('server.js got a request');
+server = require('http').createServer(function (req, res) {
   res.end(process.cwd());
 });
 
