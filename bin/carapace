@@ -22,13 +22,14 @@ function onPluginError (info) {
   process.exit(1);
 }
 
+var passthru = carapace.cli.extract(null, argv);
+
 //
 // Remark: Calling `carapace.listen()` with no
 // arguments will fall-back to the default `hook-*`
 // CLI options since 
 //
-carapace.start(function () {
-  var passthru = carapace.cli.extract();
+carapace.start(argv, function () {
   
   function configure (next) {
     if (!Array.isArray(argv.plugin)) {
