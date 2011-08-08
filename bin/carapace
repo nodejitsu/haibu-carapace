@@ -3,7 +3,7 @@
 var path = require('path'),
     async = require('async'),
     carapace = require('../lib/carapace');
-    
+
 //
 // Extract the carapace CLI arguments for this
 // process.
@@ -22,6 +22,9 @@ function onPluginError (info) {
   process.exit(1);
 }
 
+//
+// Setup the passthru arguments.
+//
 var passthru = carapace.cli.extract(null, argv);
 
 //
@@ -30,7 +33,6 @@ var passthru = carapace.cli.extract(null, argv);
 // CLI options since 
 //
 carapace.start(argv, function () {
-  
   function configure (next) {
     if (!Array.isArray(argv.plugin)) {
       argv.plugin = [argv.plugin];
