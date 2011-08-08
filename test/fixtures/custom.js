@@ -1,7 +1,7 @@
 /*
- * custom-plugin.js: Test fixture for a custom plugin in haibu-carapace.
+ * custom.js: Test fixture for a custom plugin in haibu-carapace.
  *
- *  (C) 2011 Nodejitsu Inc.
+ * (C) 2011 Nodejitsu Inc.
  *
  */
 

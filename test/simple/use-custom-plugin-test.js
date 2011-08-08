@@ -1,7 +1,7 @@
 /*
  * use-custom-plugin-test.js: Tests to ensure that custom-plugins load correctly
  *
- *  (C) 2011 Nodejitsu Inc.
+ * (C) 2011 Nodejitsu Inc.
  *
  */
  

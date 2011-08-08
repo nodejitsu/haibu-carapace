@@ -1,7 +1,7 @@
 /*
  * checkargs.js: Test fixture for a custom plugin in haibu-carapace which uses custom arguments.
  *
- *  (C) 2011 Nodejitsu Inc.
+ * (C) 2011 Nodejitsu Inc.
  *
  */
  
