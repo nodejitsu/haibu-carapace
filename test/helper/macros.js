@@ -13,8 +13,6 @@ var assert = require('assert'),
     request = require('request'),
     carapace = require('../../lib/carapace');
 
-var carapaceBin = path.join(__dirname, '..', '..', 'bin', 'carapace');
-
 var macros = exports;
 
 macros.assertListen = function (port, vows) {
@@ -83,7 +81,7 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   var context = {
     topic: function () {
       var that = this,
-          child = spawn(carapaceBin, ['--hook-port', PORT, script].concat(argv));      
+          child = spawn(carapace.bin, ['--hook-port', PORT, script].concat(argv));      
       
       child.stdout.once('data', that.callback.bind(null, null, child));
     },
@@ -103,8 +101,8 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
     "when spawning a child carapace": {
       topic: function () {
         var that = this,
-            child = spawn(carapaceBin, ['--hook-port', PORT].concat(argv));
-        
+            child = spawn(carapace.bin, ['--hook-port', PORT].concat(argv));
+
         carapace.on('*::carapace::port', function onPort (info) {
           if (info.port && info.port !== carapace['hook-port']) {
             that.port = info.port;
