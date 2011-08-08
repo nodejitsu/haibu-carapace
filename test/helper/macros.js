@@ -93,15 +93,23 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   return extendContext(context, vows);
 };
 
-macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
-  argv = argv.slice(0);
-  argv.push(script);
+macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows) {
+  options.argv = options.argv.slice(0);
+  options.argv.push(options.script);
   
   var context = {
     "when spawning a child carapace": {
       topic: function () {
         var that = this,
-            child = spawn(carapace.bin, ['--hook-port', PORT].concat(argv));
+            child = spawn(carapace.bin, ['--hook-port', options.port].concat(options.argv));
+
+        child.stdout.on('data', function (data) {
+          process.stdout.write(data);
+        });
+        
+        child.stderr.on('data', function (data) {
+          process.stdout.write(data);
+        });
 
         carapace.on('*::carapace::port', function onPort (info) {
           if (info.port && info.port !== carapace['hook-port']) {
@@ -126,15 +134,25 @@ macros.assertParentSpawn = function (PORT, script, argv, cwd, vows) {
             request({ uri: 'http://localhost:' + this.port }, this.callback.bind(null, null, child));
           },
           "that responds with a cwd": function (_, child, err, res, body) {
-            child.kill();
-            assert.equal(body, cwd);
+            if (!options.keepalive) {
+              child.kill();
+            }
+            
+            assert.equal(body, options.cwd);
           }
         }
       }
     }
   };
   
-  return extendContext(context, vows);
+  if (options.keepalive) {
+    context['when spawning a child carapace'] = extendContext(context['when spawning a child carapace'], vows);
+  }
+  else {
+    context = extendContext(context, vows);
+  }
+  
+  return context;
 };
 
 function extendContext (context, vows) {

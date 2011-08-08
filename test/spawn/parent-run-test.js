@@ -16,14 +16,19 @@ var assert = require('assert'),
     carapace = require('../../lib/carapace');
 
 var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
-    script =  path.join(jail, 'server.js'),
-    argv = ['--hook-name', 'carapace'],
-    PORT = 5060;
+    options;
+    
+options = {
+  port: 5060,
+  argv: ['--hook-name', 'carapace'],
+  script: script =  path.join(jail, 'server.js'),
+  cwd: process.cwd()
+};
     
 vows.describe('carapace/spawn/parent').addBatch({
-  "When using haibu-carapace": helper.assertListen(PORT, {
-    "an initial spawn of the child": helper.assertParentSpawn(PORT, script, argv, process.cwd())
+  "When using haibu-carapace": helper.assertListen(options.port, {
+    "an initial spawn of the child": helper.assertParentSpawn(options)
   })
 }).addBatch({
-  "followed by a second spawn of the same child": helper.assertParentSpawn(PORT, script, argv, process.cwd())
+  "followed by a second spawn of the same child": helper.assertParentSpawn(options)
 }).export(module);

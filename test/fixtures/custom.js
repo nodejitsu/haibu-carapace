@@ -10,11 +10,11 @@ var enabled = false;
 module.exports = function customPlugin (carapace) {
   if (!carapace.custom) {
     carapace.custom = function (args, done) {
-      enabled = !enabled;
-
-      if (!enabled) {
+      if (enabled) {
         return done ? done() : null;
       }
+      
+      enabled = true;
       
       this.interval = setInterval(function () {
         carapace.emit('carapace::custom', { id: carapace.id, custom: true });
@@ -24,7 +24,5 @@ module.exports = function customPlugin (carapace) {
         done();
       }      
     };
-    
-    carapace.custom();
   }
 };

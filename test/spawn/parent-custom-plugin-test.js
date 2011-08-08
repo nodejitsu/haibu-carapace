@@ -17,13 +17,18 @@ var assert = require('assert'),
 
 var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
     custom = path.join(__dirname, '..', 'fixtures', 'custom.js'),
-    script =  path.join(jail, 'server.js'),
-    argv = ['--plugin', custom, '--hook-name', '--plugin', 'heartbeat'],
-    PORT = 5060;
+    options;
+    
+options = {
+  port: 5060,
+  script: path.join(jail, 'server.js'),
+  argv: ['--plugin', custom, '--hook-name', '--plugin', 'heartbeat'],
+  cwd: process.cwd()
+};
     
 vows.describe('carapace/spawn/custom-plugin').addBatch({
-  "When using haibu-carapace": helper.assertListen(PORT, {
-    "spawning a child carapace with a custom plugin": helper.assertParentSpawn(PORT, script, argv, process.cwd(), {
+  "When using haibu-carapace": helper.assertListen(options.port, {
+    "spawning a child carapace with a custom plugin": helper.assertParentSpawn(options, {
       "after the plugin is loaded": {
         topic: function () {
           carapace.on('*::carapace::custom', this.callback.bind(carapace, null));

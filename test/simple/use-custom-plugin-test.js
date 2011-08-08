@@ -19,6 +19,7 @@ vows.describe('carapace/simple/use-custom-plugin').addBatch({
       "with an absolute path": helper.assertUse([path.join(__dirname, '..', 'fixtures', 'custom.js')], {
         "after the plugin is loaded": {
           topic: function () {
+            carapace.custom();
             carapace.on('carapace::custom', this.callback.bind(carapace, null));
           },
           "should emit the `carapace::custom` event": function (_, info) {
