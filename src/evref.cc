@@ -1,5 +1,5 @@
-#include <node/ev.h>
-#include <node/v8.h>
+#include <ev.h>
+#include <v8.h>
 
 using namespace v8;
 
