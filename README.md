@@ -110,11 +110,9 @@ List of known plugins, and options (if any) used by them
 ## Run Tests
 All of the `carapace` tests are written in [vows][4]
 
-<pre>
-npm test
-or
-sudo ./bin/test --spec
-</pre>
+``` bash
+  $ npm test
+```
 
 #### Author: [Nodejitsu Inc.](http://www.nodejitsu.com)
 #### Maintainers: [Charlie Robbins](https://github.com/indexzero),  [Bradley Meck](https://github.com/bmeck),  [Jameson Lee](https://github.com/drjackal)
