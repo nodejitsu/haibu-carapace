@@ -13,7 +13,7 @@
     "findit": "0.x.x",
     "winston": "0.3.x",
     "request": "2.0.x",
-    "vows": "0.5.x"
+    "vows": "0.5.x >=0.5.10"
   },
   "bin": {
     "carapace": "./bin/carapace",
@@ -21,6 +21,6 @@
   },
   "scripts": {
     "preinstall" : "node-waf configure build",
-    "test": "sudo bin/test --spec"
+    "test": "sudo vows test/**/*-test.js --isolate --spec"
   }
 }
