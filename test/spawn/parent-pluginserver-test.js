@@ -34,7 +34,7 @@ vows.describe('carapace/spawn/custom-plugin').addBatch({
       "a request to the server started by pluginserver.js": {
         topic: function (info, _child) {
           child = _child;
-          request({ uri: 'http://localhost:1337' }, this.callback.bind(this, null, child));
+          request({ uri: 'http://127.0.0.1:1337' }, this.callback.bind(this, null, child));
         },
         "should respond with `from-pluginserver`": function (_, child, err, res, body) {
           assert.isTrue(!err);

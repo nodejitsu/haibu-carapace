@@ -76,13 +76,11 @@ macros.assertRun = function (script, argv, vows) {
 
 macros.assertSpawn = function (PORT, script, argv, vows) {
   argv = argv.slice(0);
-  argv.push(script);
   
   var context = {
     topic: function () {
       var that = this,
-          child = spawn(carapace.bin, ['--hook-port', PORT, script].concat(argv));      
-      
+          child = spawn(carapace.bin, ['--hook-port', PORT, script].concat(argv));
       child.stdout.once('data', that.callback.bind(null, null, child));
     },
     "should respond with the proper wrapped script output": function (_, child, data) {
@@ -116,7 +114,7 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
             that.port = info.port;
             info.event = this.event
             that.callback(null, info, child);
-            carapace.un('*::carapace::port', onPort);
+            carapace.off('*::carapace::port', onPort);
           }
         });
       },
