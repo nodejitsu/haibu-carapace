@@ -25,7 +25,7 @@ function onPluginError (info) {
 //
 // Setup the passthru arguments.
 //
-var passthru = carapace.cli.extract(null, argv);
+var passthru = carapace.cli.extract(null, script);
 
 //
 // Remark: Calling `carapace.listen()` with no
