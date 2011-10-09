@@ -41,7 +41,7 @@ vows.describe('carapace/net/dolisten').addBatch({
         child.on('exit', function (code) {
           result.exitCode = code;
           // process all events before asserting
-          process.nextTick(function(){
+          process.nextTick(function () {
             that.callback(null, result, child);
           });
         });
@@ -64,7 +64,7 @@ vows.describe('carapace/net/dolisten').addBatch({
           var desired = testPort,
               basePort = desired;
           assert.equal(info.events.length, 3);
-          info.events.forEach(function(event){
+          info.events.forEach(function (event) {
             assert.equal(event.info.port, basePort++);
             assert.equal(event.info.desired, desired);
           });

@@ -25,10 +25,13 @@ vows.describe('carapace/simple/child-argument').addBatch({
       topic: function () {
         var that = this,
             child,
-            result = {
-              arguments: '',
-              exitCode: -1
-            };
+            result;
+            
+        result = {
+          arguments: '',
+          exitCode: -1
+        };
+        
         child = spawn(carapace.bin, argv.concat(checkargs));
 
         child.stdout.on('data', function (data) {
@@ -37,8 +40,11 @@ vows.describe('carapace/simple/child-argument').addBatch({
 
         child.on('exit', function (code) {
           result.exitCode = code;
-          // process all events before asserting
-          process.nextTick(function(){
+
+          //
+          // Process all events before asserting
+          //
+          process.nextTick(function () {
             that.callback(null, result, child);
           });
         });
@@ -51,11 +57,16 @@ vows.describe('carapace/simple/child-argument').addBatch({
           assert.equal(info.exitCode, 0);
         },
         "and correct client arguments": function (_, info, child) {
-          var childargs = JSON.parse(info.arguments);
-          // first two are reference to node and the script itself
-          var node = childargs.splice(0, 1);
-          var resultscript = childargs.splice(0, 1);
-          assert.equal(resultscript, script);
+          var childargs = JSON.parse(info.arguments),
+              resultScript,
+              node,
+              
+          //
+          // First two are reference to node and the script itself
+          //
+          node = childargs.splice(0, 1);
+          resultScript = childargs.splice(0, 1);
+          assert.equal(resultScript, script);
           assert.deepEqual(childargs, checkargs);
         }
       }
