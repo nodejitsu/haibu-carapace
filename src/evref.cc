@@ -1,16 +1,16 @@
-#include <ev.h>
+#include <uv.h>
 #include <v8.h>
 
 using namespace v8;
 
 Handle<Value> Unref(const Arguments &args) {
 	HandleScope scope;
-	ev_unref();
+	uv_unref(uv_default_loop());
 	scope.Close(Undefined());
 }
 Handle<Value> Ref(const Arguments &args) {
 	HandleScope scope;
-	ev_ref();
+	uv_ref(uv_default_loop());
 	scope.Close(Undefined());
 }
 
