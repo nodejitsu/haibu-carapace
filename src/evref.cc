@@ -1,16 +1,29 @@
-#include <ev.h>
+#include <node.h>
+#ifdef UV_VERSION_MAJOR
+        #include <uv.h>
+#else
+	#include <ev.h>
+#endif
 #include <v8.h>
 
 using namespace v8;
 
 Handle<Value> Unref(const Arguments &args) {
 	HandleScope scope;
-	ev_unref();
+#ifdef UV_VERSION_MAJOR
+        uv_unref(uv_default_loop()); 
+#else
+        ev_unref();
+#endif
 	scope.Close(Undefined());
 }
 Handle<Value> Ref(const Arguments &args) {
 	HandleScope scope;
-	ev_ref();
+#ifdef UV_VERSION_MAJOR
+        uv_ref(uv_default_loop()); 
+#else
+        ev_ref();
+#endif
 	scope.Close(Undefined());
 }
 
