@@ -46,9 +46,6 @@ macros.assertUse = function (plugins, vows) {
     "should have load the plugin(s)": function () {
       assert.isArray(plugins);
       names.forEach(function (name) {
-        //
-        // Remark (drjackal): Hopefully nothing malicious in plugins...
-        //
         assert.isFunction(carapace[name]);
       });
     }
@@ -61,7 +58,9 @@ macros.assertRun = function (script, argv, vows) {
   var context = {
     topic: function () {
       carapace.on('carapace::running', this.callback.bind(carapace, null));
-      carapace.run(script, argv || []);
+      carapace.argv = argv || [];
+      carapace.script = script;
+      carapace.run();
     },
     "should fire the `carapace::running` event": function () {
       assert.equal(carapace.event, 'carapace::running');
