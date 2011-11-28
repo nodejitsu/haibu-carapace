@@ -1,7 +1,7 @@
 {
   "name": "haibu-carapace",
   "main": "lib/carapace.js",
-  "version": "0.2.9",
+  "version": "0.3.0",
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.3.x",
@@ -14,6 +14,9 @@
     "winston": "0.3.x",
     "request": "2.0.x",
     "vows": "0.5.x >=0.5.10"
+  },
+  "engines": {
+    "node": ">=0.6.0"
   },
   "bin": {
     "carapace": "./bin/carapace",
