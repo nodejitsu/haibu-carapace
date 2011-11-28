@@ -8,8 +8,8 @@ var path = require('path'),
 // Extract the carapace CLI arguments for this
 // process.
 //
-var argv = carapace.cli.argv(),
-    script = argv._[0];
+var argv = carapace.cli.argv();
+carapace.script = argv._[0];
 
 function onPluginError (info) {
   //
@@ -25,7 +25,7 @@ function onPluginError (info) {
 //
 // Setup the passthru arguments.
 //
-var passthru = carapace.cli.extract(null, script);
+carapace.argv = carapace.cli.extract(null, carapace.script);
 
 //
 // Remark: Calling `carapace.listen()` with no
@@ -43,7 +43,7 @@ carapace.start(argv, function () {
     //
     carapace.on('carapace::plugin::error', onPluginError);
     
-    var plugins = argv.plugin.map(function (plugin) { 
+    var plugins = argv.plugin.map(function (plugin) {
       return carapace.load(plugin);
     });
     
@@ -71,8 +71,8 @@ carapace.start(argv, function () {
   }
   
   function runAndReport () {
-    carapace.run(script, passthru, true, function () {
-      console.log('carapace has wrapped: ' + script);
+    carapace.run(carapace.script, true, function () {
+      console.log('carapace has wrapped: ' + carapace.script);
       
       function logArray (array, msg, delim) {
         return array && array.length 
@@ -80,7 +80,7 @@ carapace.start(argv, function () {
           : null;
       }
       
-      logArray(passthru, 'with arguments: ', ' ');
+      logArray(carapace.argv, 'with arguments: ', ' ');
       logArray(Object.keys(carapace._module.exports), '  and exports: ', ', ');
     });
   }
