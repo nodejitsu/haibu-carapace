@@ -31,7 +31,7 @@ vows.describe('carapace/simple/child-argument').addBatch({
           arguments: '',
           exitCode: -1
         };
-        
+        console.error(argv.concat(checkargs))
         child = spawn(carapace.bin, argv.concat(checkargs));
 
         child.stdout.on('data', function (data) {
