@@ -5,8 +5,7 @@
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.3.x",
-    "eventemitter2": "0.4.x",
-    "hook.io": "0.6.x >=0.6.0"
+    "eventemitter2": "0.4.x"
   },
   "devDependencies": {
     "eyes": "0.1.x",
