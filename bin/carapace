@@ -27,65 +27,59 @@ function onPluginError (info) {
 //
 carapace.argv = carapace.cli.extract(null, carapace.script);
 
-//
-// Remark: Calling `carapace.listen()` with no
-// arguments will fall-back to the default `hook-*`
-// CLI options since 
-//
-carapace.start(argv, function () {
-  function configure (next) {
-    if (!Array.isArray(argv.plugin)) {
-      argv.plugin = [argv.plugin];
-    }
-    
-    //
-    // Listen for errors when loading plugins
-    //
-    carapace.on('carapace::plugin::error', onPluginError);
-    
-    var plugins = argv.plugin.map(function (plugin) {
-      return carapace.load(plugin);
-    });
-    
-    carapace.use(plugins, function () {
-      var names = argv.plugin.map(function (plugin) {
-        return path.basename(plugin, '.js');
-      })
-      
-      async.forEachSeries(names, function (plugin, next) {
-        if (!carapace[plugin]) {
-          return onPluginError({
-            plugin: plugin,
-            error: new Error('No plugin `' + plugin + '` was found after loading.')
-          });
-        }
+function configure (next) {
+  if (!Array.isArray(argv.plugin)) {
+    argv.plugin = [argv.plugin];
+  }
 
-        carapace[plugin](argv[plugin], function (err) {
-          return !err ? next() : onPluginError({
-            plugin: plugin, 
-            error: err
-          });
+  //
+  // Listen for errors when loading plugins
+  //
+  carapace.on('plugin::error', onPluginError);
+
+  var plugins = argv.plugin.map(function (plugin) {
+    return carapace.load(plugin);
+  });
+
+  carapace.use(plugins, function () {
+    var names = argv.plugin.map(function (plugin) {
+      return path.basename(plugin, '.js');
+    })
+
+    async.forEachSeries(names, function (plugin, next) {
+      if (!carapace[plugin]) {
+        return onPluginError({
+          plugin: plugin,
+          error: new Error('No plugin `' + plugin + '` was found after loading.')
         });
-      }, next);      
-    });
-  }
-  
-  function runAndReport () {
-    carapace.run(carapace.script, true, function () {
-      console.log('carapace has wrapped: ' + carapace.script);
-      
-      function logArray (array, msg, delim) {
-        return array && array.length 
-          ? console.log(msg + array.join(delim))
-          : null;
       }
-      
-      logArray(carapace.argv, 'with arguments: ', ' ');
-      logArray(Object.keys(carapace._module.exports), '  and exports: ', ', ');
-    });
-  }
-    
-  return argv.plugin
-    ? configure(runAndReport)
-    : runAndReport();
-});
+
+      carapace[plugin](argv[plugin], function (err) {
+        return !err ? next() : onPluginError({
+          plugin: plugin,
+          error: err
+        });
+      });
+    }, next);
+  });
+}
+
+function runAndReport () {
+  carapace.run(carapace.script, true, function () {
+    console.log('carapace has wrapped: ' + carapace.script);
+
+    function logArray (array, msg, delim) {
+      return array && array.length
+        ? console.log(msg + array.join(delim))
+        : null;
+    }
+
+    logArray(carapace.argv, 'with arguments: ', ' ');
+    logArray(Object.keys(carapace._module.exports), '  and exports: ', ', ');
+  });
+}
+
+return argv.plugin
+  ? configure(runAndReport)
+  : runAndReport();
+
