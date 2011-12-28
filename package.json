@@ -5,6 +5,7 @@
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.3.x",
+    "optimist": "0.3.0",
     "eventemitter2": "0.4.x"
   },
   "devDependencies": {
