@@ -20,7 +20,7 @@ var script = path.join(__dirname, '..', 'fixtures' ,'checkchildargs.js'),
     argv = ['--hook-port', IOPORT, '--hook-name', 'carapace', script];
 
 vows.describe('carapace/simple/child-argument').addBatch({
-  "When using haibu-carapace": helper.assertListen(IOPORT, {
+  "When using haibu-carapace": {
     "spawning the checkchildargs.js script via the child carapace": {
       topic: function () {
         var that = this,
@@ -71,5 +71,5 @@ vows.describe('carapace/simple/child-argument').addBatch({
         }
       }
     }
-  })
+  }
 }).export(module);
