@@ -11,12 +11,10 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var PORT = 5050;
-    
 vows.describe('carapace/simple/use').addBatch({
-  "When using haibu-carapace":  helper.assertListen(PORT, {
+  "When using haibu-carapace": {
     "use chdir plugins" : helper.assertUse(['chdir'], {
       "and use chroot and heartbeat" : helper.assertUse(['chroot', 'heartbeat'])
     })
-  })
+  }
 }).export(module);
