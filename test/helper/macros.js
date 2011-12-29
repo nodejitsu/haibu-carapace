@@ -44,13 +44,13 @@ macros.assertUse = function (plugins, vows) {
 macros.assertRun = function (script, argv, vows) {
   var context = {
     topic: function () {
-      carapace.on('carapace::running', this.callback.bind(carapace, null));
+      carapace.on('running', this.callback.bind(carapace, null));
       carapace.argv = argv || [];
       carapace.script = script;
       carapace.run();
     },
     "should fire the `carapace::running` event": function () {
-      assert.equal(carapace.event, 'carapace::running');
+      assert.equal(carapace.event, 'running');
     },
     "should rewrite process.argv transparently": function () {
       assert.equal(process.argv[1], script);
