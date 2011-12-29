@@ -9,6 +9,7 @@
 var assert = require('assert'),
     path = require('path'),
     spawn = require('child_process').spawn,
+    fork = require('child_process').fork,
     eyes = require('eyes'),
     request = require('request'),
     carapace = require('../../lib/carapace');
@@ -85,33 +86,22 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
     "when spawning a child carapace": {
       topic: function () {
         var that = this,
-            child = spawn(carapace.bin, ['--hook-port', options.port].concat(options.argv));
+            child = fork(carapace.bin, options.argv);
 
-        child.stdout.on('data', function (data) {
-          process.stdout.write(data);
-        });
-        
-        child.stderr.on('data', function (data) {
-          process.stdout.write(data);
-        });
-
-        carapace.on('*::carapace::port', function onPort (info) {
-          if (info.port && info.port !== carapace['hook-port']) {
-            that.port = info.port;
-            info.event = this.event
+        child.on('message', function onPort (info) {
+          if (info.data.port) {
+            that.port = info.data.port;
             that.callback(null, info, child);
-            carapace.off('*::carapace::port', onPort);
+            child.removeListener('port', onPort);
           }
         });
       },
-      "should emit the `*::carapace::port` event": {
+      "should emit the `port` event": {
         topic: function (info, child) {
           this.callback(null, info, child);
         },
         "with the correct port": function (_, info, child) {
-          assert.isTrue(!!~info.event.indexOf('carapace::port'));
-          assert.equal(info.port, this.port);
-          assert.notEqual(info.port, carapace['hook-port'])
+          assert.equal(info.data.port, this.port);
         },
         "should correctly start the HTTP server": {
           topic: function (_, _, _, child) {
