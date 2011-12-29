@@ -15,19 +15,6 @@ var assert = require('assert'),
 
 var macros = exports;
 
-macros.assertListen = function (port, vows) {
-  var context = {
-    topic: function () {
-      carapace.listen({ 'hook-port': port }, this.callback.bind(this, null));
-    },
-    "it should fire the `carapace::listening` event": function (_, name) {
-      assert.isTrue(carapace.listening);
-    }
-  };
-  
-  return extendContext(context, vows);
-};
-
 macros.assertUse = function (plugins, vows) {
   var names = plugins.map(function (p) { return path.basename(p, '.js') });
   
