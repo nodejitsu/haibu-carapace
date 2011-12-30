@@ -89,7 +89,7 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
             child = fork(carapace.bin, options.argv);
 
         child.on('message', function onPort (info) {
-          if (info.data.port) {
+          if (info.data && info.data.port) {
             that.port = info.data.port;
             that.callback(null, info, child);
             child.removeListener('port', onPort);
