@@ -86,7 +86,7 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
     "when spawning a child carapace": {
       topic: function () {
         var that = this,
-            child = fork(carapace.bin, options.argv);
+            child = fork(carapace.bin, options.argv, { silent: true });
 
         child.on('message', function onPort (info) {
           if (info.data && info.data.port) {

@@ -27,7 +27,7 @@ vows.describe('carapace/net/dolisten').addBatch({
               events: [],
               exitCode: -1
             };
-        child = fork(carapace.bin, argv);
+        child = fork(carapace.bin, argv, { silent: true });
 
         child.on('exit', function (code) {
           result.exitCode = code;
