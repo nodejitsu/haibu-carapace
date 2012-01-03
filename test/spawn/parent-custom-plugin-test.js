@@ -22,21 +22,29 @@ var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
 options = {
   port: 5060,
   script: path.join(jail, 'server.js'),
-  argv: ['--plugin', custom, '--hook-name', '--plugin', 'heartbeat'],
-  cwd: process.cwd()
+  argv: ['--plugin', custom, '--plugin', 'heartbeat'],
+  cwd: process.cwd(),
+  keepalive: true
 };
     
 vows.describe('carapace/spawn/custom-plugin').addBatch({
-  "When using haibu-carapace": helper.assertListen(options.port, {
+  "When using haibu-carapace": {
     "spawning a child carapace with a custom plugin": helper.assertParentSpawn(options, {
       "after the plugin is loaded": {
-        topic: function () {
-          carapace.on('*::carapace::custom', this.callback.bind(carapace, null));
+        topic: function (info, child) {
+          var that = this;
+          child.once('message', function (info) {
+            if (info.event === 'custom') {
+              that.callback(null, child, info);
+            }
+          });
         },
-        "should emit the `carapace::custom` event": function (_, info) {
-          assert.isTrue(info.custom);
+        "should emit the `carapace::custom` event": function (_, child, info) {
+          assert.isTrue(info.data.custom);
+          child._channel.close();
+          child.kill();
         }
       }
     })
-  })
+  }
 }).export(module);

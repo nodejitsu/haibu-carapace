@@ -18,7 +18,7 @@ vows.describe('carapace/simple/use-custom-plugin').addBatch({
         "after the plugin is loaded": {
           topic: function () {
             carapace.custom();
-            carapace.on('custom', this.callback.bind(carapace, null));
+            carapace.once('custom', this.callback.bind(carapace, null));
           },
           "should emit the `custom` event": function (_, info) {
             assert.isTrue(info.custom);

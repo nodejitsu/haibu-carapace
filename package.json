@@ -10,8 +10,6 @@
   },
   "devDependencies": {
     "eyes": "0.1.x",
-    "findit": "0.x.x",
-    "winston": "0.3.x",
     "request": "2.0.x",
     "vows": "0.6.x"
   },
@@ -19,8 +17,7 @@
     "node": ">=0.6.0"
   },
   "bin": {
-    "carapace": "./bin/carapace",
-    "carapace-client": "./bin/carapace-client"
+    "carapace": "./bin/carapace"
   },
   "scripts": {
     "preinstall" : "node-waf configure build",

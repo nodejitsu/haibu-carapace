@@ -1,4 +1,5 @@
 var port, server;
+
 // default port to listen to
 port = 1337;
 

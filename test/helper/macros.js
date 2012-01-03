@@ -1,5 +1,5 @@
 /*
- * macros.js: Test macros hook.io module
+ * macros.js: Test macros carapace module
  *
  * (C) 2011 Marak Squires, Charlie Robbins
  * MIT LICENCE
@@ -67,11 +67,17 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   var context = {
     topic: function () {
       var that = this,
-          child = spawn(carapace.bin, ['--hook-port', PORT, script].concat(argv));
-      child.stdout.once('data', that.callback.bind(null, null, child));
+          child = fork(carapace.bin, [script].concat(argv));
+          
+      child.on('message', function onRunning(info) {
+        if (info.event === 'running') {
+          child.removeListener('message', onRunning);
+          that.callback.call(null, null, child, info);
+        }
+      });
     },
-    "should respond with the proper wrapped script output": function (_, child, data) {
-      assert.notEqual(data.toString().indexOf(script), -1);
+    "should respond with the proper wrapped script output": function (_, child, info) {
+      assert.equal(info.data.script, script);
     }
   }
   
@@ -92,7 +98,7 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
           if (info.data && info.data.port) {
             that.port = info.data.port;
             that.callback(null, info, child);
-            child.removeListener('port', onPort);
+            child.removeListener('message', onPort);
           }
         });
       },

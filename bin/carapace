@@ -44,7 +44,7 @@ function configure (next) {
   carapace.use(plugins, function () {
     var names = argv.plugin.map(function (plugin) {
       return path.basename(plugin, '.js');
-    })
+    });
 
     async.forEachSeries(names, function (plugin, next) {
       if (!carapace[plugin]) {
@@ -66,11 +66,11 @@ function configure (next) {
 
 function runAndReport () {
   carapace.run(carapace.script, true, function () {
-    console.log('carapace has wrapped: ' + carapace.script);
+    console.error('carapace has wrapped: ' + carapace.script);
 
     function logArray (array, msg, delim) {
       return array && array.length
-        ? console.log(msg + array.join(delim))
+        ? console.error(msg + array.join(delim))
         : null;
     }
 

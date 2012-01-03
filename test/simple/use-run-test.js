@@ -16,7 +16,7 @@ vows.describe('carapace/simple/use-plugins').addBatch({
     "load up chdir, chroot, heartbeat plugins" : helper.assertUse(['chdir', 'chroot', 'heartbeat'], {
       "and running the heartbeat plugin" : {
         topic : function () {
-          carapace.on('heartbeat', this.callback.bind(carapace, null));
+          carapace.once('heartbeat', this.callback.bind(carapace, null));
           carapace.heartbeat();
         },
         "should see a heartbeat event" : function (_, event, data) {

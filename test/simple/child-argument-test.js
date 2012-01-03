@@ -14,10 +14,9 @@ var assert = require('assert'),
     carapace = require('../../lib/carapace');
 
 var script = path.join(__dirname, '..', 'fixtures' ,'checkchildargs.js'),
-    IOPORT = 5060,
     testPort = 8000,
     checkargs = ['argument', '-a', 'aargument', '--test', 'testargument'];
-    argv = ['--hook-port', IOPORT, '--hook-name', 'carapace', script];
+    argv = [script];
 
 vows.describe('carapace/simple/child-argument').addBatch({
   "When using haibu-carapace": {
