@@ -20,7 +20,6 @@
     "carapace": "./bin/carapace"
   },
   "scripts": {
-    "preinstall" : "node-waf configure build",
     "test": "sudo vows test/**/*-test.js --isolate --spec"
   }
 }
