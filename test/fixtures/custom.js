@@ -17,7 +17,7 @@ module.exports = function customPlugin (carapace) {
       enabled = true;
       
       this.interval = setInterval(function () {
-        carapace.emit('carapace::custom', { id: carapace.id, custom: true });
+        carapace.emit('custom', { id: carapace.id, custom: true });
       }, 1000);
       
       if (done) {

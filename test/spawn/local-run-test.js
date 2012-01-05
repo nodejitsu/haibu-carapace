@@ -15,22 +15,20 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var PORT = 5050;
-
 var script = path.join(__dirname, '..', '..', 'examples', 'chroot-jail', 'server.js');
     
 vows.describe('carapace/spawn/local').addBatch({
-  "When using haibu-carapace": helper.assertListen(PORT, {
+  "When using haibu-carapace": {
     "and running `./server.js` with no plugins": helper.assertRun(script, null, {
       "should set the correct exports on carapace._module": function (_, _) {
         assert.equal(carapace._module.exports.port, 1337);
       },
-      "should emit the `carapace::port` event": {
+      "should emit the `port` event": {
         topic: function () {
-          carapace.on('carapace::port', this.callback.bind(carapace, null));
+          carapace.on('port', this.callback.bind(carapace, null));
         },
         "with the correct port": function (err, info) {
-          assert.equal(carapace.event, 'carapace::port');
+          assert.equal(carapace.event, 'port');
           assert.equal(info.port, 1337);
         },
         "should correctly start the HTTP server": {
@@ -43,5 +41,5 @@ vows.describe('carapace/spawn/local').addBatch({
         }
       }
     })
-  })
+  }
 }).export(module);

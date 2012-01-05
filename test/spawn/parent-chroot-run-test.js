@@ -17,16 +17,14 @@ var assert = require('assert'),
 
 var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
     script =  'server.js',
-    argv = ['--plugin', 'chroot', '--plugin', 'chdir', '--chroot', jail, '--chdir', '/', '--hook-name', 'carapace'],
-    PORT = 5060;
+    argv = ['--plugin', 'chroot', '--plugin', 'chdir', '--chroot', jail, '--chdir', '/'];
     
 vows.describe('carapace/run').addBatch({
-  "When using haibu-carapace": helper.assertListen(PORT, {
+  "When using haibu-carapace": {
     "spawning a child carapace in a chroot jail": helper.assertParentSpawn({
-      port: PORT, 
-      script: script, 
-      argv: argv, 
+      script: script,
+      argv: argv,
       cwd: '/'
     })
-  })
+  }
 }).export(module);

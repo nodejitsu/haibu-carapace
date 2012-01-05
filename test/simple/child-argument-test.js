@@ -14,13 +14,12 @@ var assert = require('assert'),
     carapace = require('../../lib/carapace');
 
 var script = path.join(__dirname, '..', 'fixtures' ,'checkchildargs.js'),
-    IOPORT = 5060,
     testPort = 8000,
     checkargs = ['argument', '-a', 'aargument', '--test', 'testargument'];
-    argv = ['--hook-port', IOPORT, '--hook-name', 'carapace', script];
+    argv = [script];
 
 vows.describe('carapace/simple/child-argument').addBatch({
-  "When using haibu-carapace": helper.assertListen(IOPORT, {
+  "When using haibu-carapace": {
     "spawning the checkchildargs.js script via the child carapace": {
       topic: function () {
         var that = this,
@@ -71,5 +70,5 @@ vows.describe('carapace/simple/child-argument').addBatch({
         }
       }
     }
-  })
+  }
 }).export(module);

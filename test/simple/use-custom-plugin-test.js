@@ -11,18 +11,16 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var PORT = 5050;
-    
 vows.describe('carapace/simple/use-custom-plugin').addBatch({
-  "When using haibu-carapace":  helper.assertListen(PORT, {
+  "When using haibu-carapace": {
     "a custom plugin" : {
       "with an absolute path": helper.assertUse([path.join(__dirname, '..', 'fixtures', 'custom.js')], {
         "after the plugin is loaded": {
           topic: function () {
             carapace.custom();
-            carapace.on('carapace::custom', this.callback.bind(carapace, null));
+            carapace.once('custom', this.callback.bind(carapace, null));
           },
-          "should emit the `carapace::custom` event": function (_, info) {
+          "should emit the `custom` event": function (_, info) {
             assert.isTrue(info.custom);
           }
         }
@@ -31,5 +29,5 @@ vows.describe('carapace/simple/use-custom-plugin').addBatch({
         assert.throws(function () { carapace.load('../fixtures/relative.js') });
       }
     }
-  })
+  }
 }).export(module);

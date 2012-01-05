@@ -4,7 +4,7 @@ Haibu Drone's Little Shell
 ## What is Carapace
 
 Carapace is an process wrapper for Node.js applications that is part of the [Haibu][1] Network.
-Carapace also provides a [Hook.IO][2] based plugin system to simplify deployment and development of applications.
+Carapace also provides a plugin system to simplify deployment and development of applications.
 ## What can I do with Carapace?
 
 By utilizing Carapace you can help automate deployments of applications into a custom environment.
@@ -35,37 +35,31 @@ code is available in `./examples/jailer.js` and must be ran with **superuser pri
 
 ```javascript
 
-var carapace = require('../lib/carapace');
+var carapace = require('haibu-carapace');
 
 var script = 'server.js',
-    hookOpts = {
-      'debug' : false,
-      'hook-port' :  5061
-    },
     scriptPort = 31337;
 
-carapace.listen( hookOpts,function () {
-  carapace.on('carapace::plugin::error', function (info) {
-    console.log('Error loading plugin: ' + info.plugin);
-    console.log(info.error.message);
-    console.dir(info.error.stack.split('\n'))
-  });
-
-  carapace.use([
-    carapace.plugins.heartbeat, 
-    carapace.plugins.chroot, 
-    carapace.plugins.chdir
-  ], function () {
-    carapace.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
-    carapace.chdir('.');
-    carapace.run(script, ['--port', scriptPort], function afterRun() {
-      carapace.heartbeat(function () {
-        console.log('bump'.red);
-      },1000);
-      console.log(script.yellow + ' running on port '.grey + scriptPort.toString().green);
-    });
-  });  
+carapace.on('carapace::plugin::error', function (info) {
+  console.log('Error loading plugin: ' + info.plugin);
+  console.log(info.error.message);
+  console.dir(info.error.stack.split('\n'))
 });
+
+carapace.use([
+  carapace.plugins.heartbeat, 
+  carapace.plugins.chroot, 
+  carapace.plugins.chdir
+], function () {
+  carapace.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
+  carapace.chdir('.');
+  carapace.run(script, ['--port', scriptPort], function afterRun() {
+    carapace.heartbeat(function () {
+      console.log('bump'.red);
+    },1000);
+    console.log(script+ ' running on port '+ scriptPort.toString());
+  });
+});  
 
 ```
 ```shell
@@ -77,13 +71,7 @@ watch 'curl http://localhost:31337'
 
 ## Carapace CLI Options
 
-`carapace [hook-options] --plugin [plugin] --[plugin] [options] application [options]`
-
-#### *Carapace's Plugin Manager Options*
-`--hook-port [port]`
-`--hook-host [hostname]`
-
-Carapace's Plugin Manager's Listening port/hostname
+`carapace --plugin [plugin] --[plugin] [options] application [options]`
 
 #### *Plugins*
 `--plugin [plugin]`
@@ -118,6 +106,5 @@ All of the `carapace` tests are written in [vows][4]
 #### Maintainers: [Charlie Robbins](https://github.com/indexzero),  [Bradley Meck](https://github.com/bmeck),  [Jameson Lee](https://github.com/drjackal)
 
 [1]:https://github.com/nodejitsu/haibu
-[2]:https://github.com/hookio/hook.io
 [3]:https://github.com/indexzero/forever
 [4]:https://github.com/cloudhead/vows

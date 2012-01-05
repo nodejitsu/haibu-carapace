@@ -8,18 +8,17 @@
 
 var assert = require('assert'),
     path = require('path'),
-    spawn = require('child_process').spawn,
+    fork = require('child_process').fork,
     vows = require('vows'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
 var script = path.join(__dirname, '..', 'fixtures' ,'multi-server.js'),
-    IOPORT = 5060,
     testPort = 8000,
-    argv = ['--hook-port', IOPORT, '--hook-name', 'carapace', script];
+    argv = [script];
 
 vows.describe('carapace/net/dolisten').addBatch({
-  "When using haibu-carapace": helper.assertListen(IOPORT, {
+  "When using haibu-carapace": {
     "spawning the server-dolisten.js script the child carapace": {
       topic: function () {
         var that = this,
@@ -28,15 +27,7 @@ vows.describe('carapace/net/dolisten').addBatch({
               events: [],
               exitCode: -1
             };
-        child = spawn(carapace.bin, argv);
-
-        child.stdout.on('data', function (data) {
-          process.stdout.write(data);
-        });
-
-        child.stderr.on('data', function (data) {
-          process.stdout.write(data);
-        });
+        child = fork(carapace.bin, argv, { silent: true });
 
         child.on('exit', function (code) {
           result.exitCode = code;
@@ -46,10 +37,10 @@ vows.describe('carapace/net/dolisten').addBatch({
           });
         });
 
-        carapace.on('*::carapace::port', function onPort (info) {
-          result.events.push({
-            event: this.event,
-            info: info
+        child.on('message', function onPort (info) {
+          info.event == 'port' && result.events.push({
+            event: info.event,
+            info: info.data
           });
         });
       },
@@ -60,7 +51,7 @@ vows.describe('carapace/net/dolisten').addBatch({
         "with the correct exit code": function (_, info, child) {
           assert.equal(info.exitCode, 0);
         },
-        "and 3x emit the `*::carapace::port` event with the correct port": function (_, info, child) {
+        "and 3x emit the `port` event with the correct port": function (_, info, child) {
           var desired = testPort,
               basePort = desired;
           assert.equal(info.events.length, 3);
@@ -71,5 +62,5 @@ vows.describe('carapace/net/dolisten').addBatch({
         }
       }
     }
-  })
+  }
 }).export(module);

@@ -5,13 +5,11 @@
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.3.x",
-    "eventemitter2": "0.4.x",
-    "hook.io": "0.6.x >=0.6.0"
+    "optimist": "0.3.0",
+    "eventemitter2": "0.4.x"
   },
   "devDependencies": {
     "eyes": "0.1.x",
-    "findit": "0.x.x",
-    "winston": "0.3.x",
     "request": "2.0.x",
     "vows": "0.6.x"
   },
@@ -19,11 +17,9 @@
     "node": ">=0.6.0"
   },
   "bin": {
-    "carapace": "./bin/carapace",
-    "carapace-client": "./bin/carapace-client"
+    "carapace": "./bin/carapace"
   },
   "scripts": {
-    "preinstall" : "node-waf configure build",
     "test": "sudo vows test/**/*-test.js --isolate --spec"
   }
 }

@@ -12,10 +12,8 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var PORT = 5050;
-    
 vows.describe('carapace/simple/use-pluginserver').addBatch({
-  "When using haibu-carapace":  helper.assertListen(PORT, {
+  "When using haibu-carapace": {
     "a custom plugin that starts a server" : helper.assertUse([path.join(__dirname, '..', 'fixtures', 'pluginserver.js')], {
       "a request to the server started by pluginserver.js": {
         topic: function () {
@@ -31,5 +29,5 @@ vows.describe('carapace/simple/use-pluginserver').addBatch({
         }
       }
     })
-  })
+  }
 }).export(module);

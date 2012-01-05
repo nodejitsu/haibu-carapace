@@ -19,16 +19,15 @@ var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
     options;
     
 options = {
-  port: 5060,
-  argv: ['--hook-name', 'carapace'],
+  argv: [],
   script: script =  path.join(jail, 'server.js'),
   cwd: process.cwd()
 };
     
 vows.describe('carapace/spawn/parent').addBatch({
-  "When using haibu-carapace": helper.assertListen(options.port, {
+  "When using haibu-carapace": {
     "an initial spawn of the child": helper.assertParentSpawn(options)
-  })
+  }
 }).addBatch({
   "followed by a second spawn of the same child": helper.assertParentSpawn(options)
 }).export(module);
