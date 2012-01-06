@@ -8,7 +8,7 @@
 
 var assert = require('assert'),
     path = require('path'),
-    fork = require('child_process').fork,
+    fork = require('node-fork').fork,
     vows = require('vows'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');

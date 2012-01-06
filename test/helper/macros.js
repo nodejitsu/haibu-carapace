@@ -9,7 +9,7 @@
 var assert = require('assert'),
     path = require('path'),
     spawn = require('child_process').spawn,
-    fork = require('child_process').fork,
+    fork = require('node-fork').fork,
     eyes = require('eyes'),
     request = require('request'),
     carapace = require('../../lib/carapace');
