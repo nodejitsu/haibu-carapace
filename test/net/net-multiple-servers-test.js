@@ -13,7 +13,7 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var script = path.join(__dirname, '..', 'fixtures' ,'multi-server.js'),
+var script = path.join(__dirname, '..', 'fixtures', 'multi-server.js'),
     testPort = 8000,
     argv = [script];
 
@@ -22,13 +22,15 @@ vows.describe('carapace/net/dolisten').addBatch({
     "spawning the server-dolisten.js script the child carapace": {
       topic: function () {
         var that = this,
-            child,
-            result = {
-              events: [],
-              exitCode: -1
-            };
+            result,
+            child;
+            
+        result = {
+          events: [],
+          exitCode: -1
+        };
+            
         child = fork(carapace.bin, argv, { silent: true });
-
         child.on('exit', function (code) {
           result.exitCode = code;
           // process all events before asserting
@@ -54,6 +56,7 @@ vows.describe('carapace/net/dolisten').addBatch({
         "and 3x emit the `port` event with the correct port": function (_, info, child) {
           var desired = testPort,
               basePort = desired;
+              
           assert.equal(info.events.length, 3);
           info.events.forEach(function (event) {
             assert.equal(event.info.port, basePort++);
