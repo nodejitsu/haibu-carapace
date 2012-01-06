@@ -41,7 +41,6 @@ vows.describe('carapace/spawn/custom-plugin').addBatch({
         },
         "should emit the `carapace::custom` event": function (_, child, info) {
           assert.isTrue(info.data.custom);
-          child._channel.close();
           child.kill();
         }
       }
