@@ -66,11 +66,11 @@ function configure (next) {
 
 function runAndReport () {
   carapace.run(carapace.script, true, function () {
-    console.error('carapace has wrapped: ' + carapace.script);
+    console.log('carapace has wrapped: ' + carapace.script);
 
     function logArray (array, msg, delim) {
       return array && array.length
-        ? console.error(msg + array.join(delim))
+        ? console.log(msg + array.join(delim))
         : null;
     }
 
