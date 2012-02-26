@@ -17,7 +17,7 @@
   "devDependencies": {
     "eyes": "0.1.x",
     "node-fork": "git://github.com/bmeck/node-fork.git",
-    "request": "2.0.x",
+    "request": "2.9.x",
     "vows": "0.6.x"
   },
   "engines": {
