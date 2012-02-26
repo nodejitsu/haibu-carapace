@@ -2,6 +2,11 @@
   "name": "haibu-carapace",
   "main": "lib/carapace.js",
   "version": "0.5.4",
+  "author": "Nodejitsu Inc. <info@nodejitsu.com>",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/nodejitsu/haibu-carapace.git"
+  },
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.4.x",
