@@ -29,11 +29,11 @@ vows.describe('carapace/spawn/local').addBatch({
         },
         "with the correct port": function (err, info) {
           assert.equal(carapace.event, 'port');
-          assert.equal(info.port, 1337);
+          assert.equal(info.desired, 1337);
         },
         "should correctly start the HTTP server": {
-          topic: function () {
-            request({ uri: 'http://localhost:' + carapace._module.exports.port }, this.callback);      
+          topic: function (info) {
+            request({ uri: 'http://localhost:' + info.port }, this.callback);      
           },
           "that responds with a cwd": function (err, res, body) {
             assert.equal(body, process.cwd());

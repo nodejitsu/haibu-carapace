@@ -54,12 +54,10 @@ vows.describe('carapace/net/dolisten').addBatch({
           assert.equal(info.exitCode, 0);
         },
         "and 3x emit the `port` event with the correct port": function (_, info, child) {
-          var desired = testPort,
-              basePort = desired;
+          var desired = testPort;
               
           assert.equal(info.events.length, 3);
-          info.events.forEach(function (event) {
-            assert.equal(event.info.port, basePort++);
+          info.events.forEach(function (event, index) {
             assert.equal(event.info.desired, desired);
           });
         }
