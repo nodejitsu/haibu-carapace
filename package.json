@@ -7,6 +7,10 @@
     "type": "git",
     "url": "http://github.com/nodejitsu/haibu-carapace.git"
   },
+  "maintainers": [
+    "bmeck <bradley@nodejitsu.com>",
+    "indexzero <charlie@nodejitsu.com>"
+  ],
   "dependencies": {
     "async": "0.1.x",
     "daemon": "0.4.x",
@@ -30,3 +34,4 @@
     "test": "sudo vows test/**/*-test.js --isolate --spec"
   }
 }
+
