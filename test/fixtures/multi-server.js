@@ -15,15 +15,15 @@ var server3 = net.createServer(function (socket) {
 });
 
 server1.addListener('error', function (err) {
-  process.exit(1);
+  process.exit(101);
 });
 
 server2.addListener('error', function (err) {
-  process.exit(2);
+  process.exit(102);
 });
 
 server3.addListener('error', function (err) {
-  process.exit(3);
+  process.exit(103);
 });
 
 //
