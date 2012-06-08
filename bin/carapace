@@ -66,7 +66,12 @@ function configure (next) {
 }
 
 function runAndReport () {
-  carapace.run(carapace.script, true, function () {
+  carapace.run(carapace.script, true, function (err) {
+
+    if (err) {
+      console.log(err);
+      process.exit();
+    }
     _send.call(process, 'carapace has wrapped: ' + carapace.script);
 
     function logArray (array, msg, delim) {
