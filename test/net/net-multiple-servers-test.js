@@ -11,15 +11,15 @@ var assert = require('assert'),
     fork = require('node-fork').fork,
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
 var script = path.join(__dirname, '..', 'fixtures', 'multi-server.js'),
     testPort = 8000,
     argv = [script];
 
-vows.describe('carapace/net/dolisten').addBatch({
-  "When using haibu-carapace": {
-    "spawning the server-dolisten.js script the child carapace": {
+vows.describe('drone/net/dolisten').addBatch({
+  "When using haibu-drone": {
+    "spawning the server-dolisten.js script the child drone": {
       topic: function () {
         var that = this,
             result,
@@ -30,7 +30,7 @@ vows.describe('carapace/net/dolisten').addBatch({
           exitCode: -1
         };
             
-        child = fork(carapace.bin, argv, { silent: true });
+        child = fork(drone.bin, argv, { silent: true });
         child.on('exit', function (code) {
           result.exitCode = code;
           // process all events before asserting

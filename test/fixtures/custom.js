@@ -1,5 +1,5 @@
 /*
- * custom.js: Test fixture for a custom plugin in haibu-carapace.
+ * custom.js: Test fixture for a custom plugin in haibu-drone.
  *
  * (C) 2011 Nodejitsu Inc.
  *
@@ -7,9 +7,9 @@
 
 var enabled = false;
  
-module.exports = function customPlugin (carapace) {
-  if (!carapace.custom) {
-    carapace.custom = function (args, done) {
+module.exports = function customPlugin (drone) {
+  if (!drone.custom) {
+    drone.custom = function (args, done) {
       if (enabled) {
         return done ? done() : null;
       }
@@ -17,7 +17,7 @@ module.exports = function customPlugin (carapace) {
       enabled = true;
       
       this.interval = setInterval(function () {
-        carapace.emit('custom', { id: carapace.id, custom: true });
+        drone.emit('custom', { id: drone.id, custom: true });
       }, 1000);
       
       if (done) {

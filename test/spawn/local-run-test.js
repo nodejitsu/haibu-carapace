@@ -1,5 +1,5 @@
 /*
- * use-test.js: Basic tests for the carapace module
+ * use-test.js: Basic tests for the drone module
  *
  * (C) 2011 Nodejitsu Inc
  * MIT LICENCE
@@ -13,22 +13,22 @@ var assert = require('assert'),
     request = require('request'),
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
 var script = path.join(__dirname, '..', '..', 'examples', 'chroot-jail', 'server.js');
     
-vows.describe('carapace/spawn/local').addBatch({
-  "When using haibu-carapace": {
+vows.describe('drone/spawn/local').addBatch({
+  "When using haibu-drone": {
     "and running `./server.js` with no plugins": helper.assertRun(script, null, {
-      "should set the correct exports on carapace._module": function (_, _) {
-        assert.equal(carapace._module.exports.port, 1337);
+      "should set the correct exports on drone._module": function (_, _) {
+        assert.equal(drone._module.exports.port, 1337);
       },
       "should emit the `port::bound` event": {
         topic: function () {
-          carapace.on('port::bound', this.callback.bind(carapace, null));
+          drone.on('port::bound', this.callback.bind(drone, null));
         },
         "with the correct port": function (err, info) {
-          assert.equal(carapace.event, 'port::bound');
+          assert.equal(drone.event, 'port::bound');
           assert.equal(info.desired, 1337);
         },
         "should correctly start the HTTP server": {

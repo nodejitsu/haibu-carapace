@@ -1,5 +1,5 @@
 /*
- * Test _doListen function in net.js of haibu.carapace when there are multiple servers
+ * Test _doListen function in net.js of haibu.drone when there are multiple servers
  *
  */
 var net = require('net'),

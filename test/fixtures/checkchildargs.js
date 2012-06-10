@@ -1,5 +1,5 @@
 /*
- * Test client argument rewrite of haibu.carapace
+ * Test client argument rewrite of haibu.drone
  *
  */
 

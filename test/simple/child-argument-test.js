@@ -11,16 +11,16 @@ var assert = require('assert'),
     spawn = require('child_process').spawn,
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
 var script = path.join(__dirname, '..', 'fixtures' ,'checkchildargs.js'),
     testPort = 8000,
     checkargs = ['argument', '-a', 'aargument', '--test', 'testargument'];
     argv = [script];
 
-vows.describe('carapace/simple/child-argument').addBatch({
-  "When using haibu-carapace": {
-    "spawning the checkchildargs.js script via the child carapace": {
+vows.describe('drone/simple/child-argument').addBatch({
+  "When using haibu-drone": {
+    "spawning the checkchildargs.js script via the child drone": {
       topic: function () {
         var that = this,
             child,
@@ -31,7 +31,7 @@ vows.describe('carapace/simple/child-argument').addBatch({
           exitCode: -1
         };
         
-        child = spawn(carapace.bin, argv.concat(checkargs));
+        child = spawn(drone.bin, argv.concat(checkargs));
 
         child.stdout.on('data', function (data) {
           result.arguments += data;

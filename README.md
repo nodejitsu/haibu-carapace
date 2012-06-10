@@ -16,9 +16,9 @@ Combining Carapace with the [Forever][3] Daemon can allow you run the applicatio
 curl http://npmjs.org/install.sh | sh
 ```
 
-### Installing carapace
+### Installing drone
 ```shell
-[sudo] npm install carapace
+[sudo] npm install drone
 ```
 
 ## Example(s)
@@ -35,26 +35,26 @@ code is available in `./examples/jailer.js` and must be ran with **superuser pri
 
 ```javascript
 
-var carapace = require('haibu-carapace');
+var drone = require('haibu-drone');
 
 var script = 'server.js',
     scriptPort = 31337;
 
-carapace.on('carapace::plugin::error', function (info) {
+drone.on('drone::plugin::error', function (info) {
   console.log('Error loading plugin: ' + info.plugin);
   console.log(info.error.message);
   console.dir(info.error.stack.split('\n'))
 });
 
-carapace.use([
-  carapace.plugins.heartbeat, 
-  carapace.plugins.chroot, 
-  carapace.plugins.chdir
+drone.use([
+  drone.plugins.heartbeat, 
+  drone.plugins.chroot, 
+  drone.plugins.chdir
 ], function () {
-  carapace.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
-  carapace.chdir('.');
-  carapace.run(script, ['--port', scriptPort], function afterRun() {
-    carapace.heartbeat(function () {
+  drone.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
+  drone.chdir('.');
+  drone.run(script, ['--port', scriptPort], function afterRun() {
+    drone.heartbeat(function () {
       console.log('bump'.red);
     },1000);
     console.log(script+ ' running on port '+ scriptPort.toString());
@@ -71,12 +71,12 @@ watch 'curl http://localhost:31337'
 
 ## Carapace CLI Options
 
-`carapace --plugin [plugin] --[plugin] [options] application [options]`
+`drone --plugin [plugin] --[plugin] [options] application [options]`
 
 #### *Plugins*
 `--plugin [plugin]`
 
-Plugin to use with the carapace instance
+Plugin to use with the drone instance
 
 #### *Plugin Options*
 `--[plugin] [options]`
@@ -93,10 +93,10 @@ List of known plugins, and options (if any) used by them
 
 * chroot - directory to rebind as root directory '/'
 * chdir - directory to change into 
-* heartbeat - time in micro-seconds between 'carapace::heartbeat' events
+* heartbeat - time in micro-seconds between 'drone::heartbeat' events
 
 ## Run Tests
-All of the `carapace` tests are written in [vows][4]
+All of the `drone` tests are written in [vows][4]
 
 ``` bash
   $ npm test

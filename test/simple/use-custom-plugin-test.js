@@ -9,16 +9,16 @@ var assert = require('assert'),
     path = require('path'),
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
-vows.describe('carapace/simple/use-custom-plugin').addBatch({
-  "When using haibu-carapace": {
+vows.describe('drone/simple/use-custom-plugin').addBatch({
+  "When using haibu-drone": {
     "a custom plugin" : {
       "with an absolute path": helper.assertUse([path.join(__dirname, '..', 'fixtures', 'custom.js')], {
         "after the plugin is loaded": {
           topic: function () {
-            carapace.custom();
-            carapace.once('custom', this.callback.bind(carapace, null));
+            drone.custom();
+            drone.once('custom', this.callback.bind(drone, null));
           },
           "should emit the `custom` event": function (_, info) {
             assert.isTrue(info.custom);
@@ -26,7 +26,7 @@ vows.describe('carapace/simple/use-custom-plugin').addBatch({
         }
       }),
       "with a relative path": function () {
-        assert.throws(function () { carapace.load('../fixtures/relative.js') });
+        assert.throws(function () { drone.load('../fixtures/relative.js') });
       }
     }
   }

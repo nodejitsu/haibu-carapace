@@ -3,19 +3,19 @@
 var path = require('path'),
     _send = process.send || function(){},
     async = require('async'),
-    carapace = require('../lib/carapace');
+    drone = require('../lib/drone');
 
 //
-// Extract the carapace CLI arguments for this
+// Extract the drone CLI arguments for this
 // process.
 //
-var argv = carapace.cli.argv();
-carapace.script = argv._[0];
+var argv = drone.cli.argv();
+drone.script = argv._[0];
 
 function onPluginError (info) {
   //
   // If any of the plugins have failed to load then short
-  // circuit this carapace process because it requested them all.
+  // circuit this drone process because it requested them all.
   //
   console.log('Error loading plugin: ' + info.plugin);
   console.log(info.error.message);
@@ -26,7 +26,7 @@ function onPluginError (info) {
 //
 // Setup the passthru arguments.
 //
-carapace.argv = carapace.cli.extract(null, carapace.script);
+drone.argv = drone.cli.extract(null, drone.script);
 
 function configure (next) {
   if (!Array.isArray(argv.plugin)) {
@@ -36,26 +36,26 @@ function configure (next) {
   //
   // Listen for errors when loading plugins
   //
-  carapace.on('plugin::error', onPluginError);
+  drone.on('plugin::error', onPluginError);
 
   var plugins = argv.plugin.map(function (plugin) {
-    return carapace.load(plugin);
+    return drone.load(plugin);
   });
 
-  carapace.use(plugins, function () {
+  drone.use(plugins, function () {
     var names = argv.plugin.map(function (plugin) {
       return path.basename(plugin, '.js');
     });
 
     async.forEachSeries(names, function (plugin, next) {
-      if (!carapace[plugin]) {
+      if (!drone[plugin]) {
         return onPluginError({
           plugin: plugin,
           error: new Error('No plugin `' + plugin + '` was found after loading.')
         });
       }
 
-      carapace[plugin](argv[plugin], function (err) {
+      drone[plugin](argv[plugin], function (err) {
         return !err ? next() : onPluginError({
           plugin: plugin,
           error: err
@@ -66,13 +66,15 @@ function configure (next) {
 }
 
 function runAndReport () {
-  carapace.run(carapace.script, true, function (err) {
+  drone.run(drone.script, true, function (err) {
 
     if (err) {
       console.log(err);
       process.exit();
     }
-    _send.call(process, 'carapace has wrapped: ' + carapace.script);
+    _send.call(process, 'drone has wrapped: ' + drone.script);
+
+    console.log('> drone ' + process.pid +  ' has wrapped: ' + drone.script);
 
     function logArray (array, msg, delim) {
       return array && array.length
@@ -80,8 +82,8 @@ function runAndReport () {
         : null;
     }
 
-    logArray(carapace.argv, 'with arguments: ', ' ');
-    logArray(Object.keys(carapace._module.exports), '  and exports: ', ', ');
+    logArray(drone.argv, 'with arguments: ', ' ');
+    logArray(Object.keys(drone._module.exports), '  and exports: ', ', ');
   });
 }
 

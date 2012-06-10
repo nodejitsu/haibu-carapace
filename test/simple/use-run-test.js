@@ -1,5 +1,5 @@
 /*
- * use-test.js: Basic tests for the carapace module
+ * use-test.js: Basic tests for the drone module
  *
  * (C) 2011 Nodejitsu Inc
  * MIT LICENCE
@@ -9,19 +9,19 @@
 var assert = require('assert'),
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
-vows.describe('carapace/simple/use-plugins').addBatch({
-  "When using haibu-carapace":  {
+vows.describe('drone/simple/use-plugins').addBatch({
+  "When using haibu-drone":  {
     "load up chdir, chroot, heartbeat plugins" : helper.assertUse(['chdir', 'chroot', 'heartbeat'], {
       "and running the heartbeat plugin" : {
         topic : function () {
-          carapace.once('heartbeat', this.callback.bind(carapace, null));
-          carapace.heartbeat();
+          drone.once('heartbeat', this.callback.bind(drone, null));
+          drone.heartbeat();
         },
         "should see a heartbeat event" : function (_, event, data) {
-          assert.isString(carapace.event);
-          assert.equal(carapace.event, 'heartbeat');
+          assert.isString(drone.event);
+          assert.equal(drone.event, 'heartbeat');
         }
       }
     })

@@ -1,5 +1,5 @@
 /*
- * macros.js: Test macros carapace module
+ * macros.js: Test macros drone module
  *
  * (C) 2011 Marak Squires, Charlie Robbins
  * MIT LICENCE
@@ -12,7 +12,7 @@ var assert = require('assert'),
     fork = require('node-fork').fork,
     eyes = require('eyes'),
     request = require('request'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
 var macros = exports;
 
@@ -23,18 +23,18 @@ macros.assertUse = function (plugins, vows) {
     topic: function () {
       //
       // should be an array
-      // we have to do this because carapace, preloads these plugins
+      // we have to do this because drone, preloads these plugins
       //
       var scripts = plugins.map(function (plugin) {
-        return carapace.load(plugin);
+        return drone.load(plugin);
       });
       
-      carapace.use(scripts, this.callback.bind(null, null));
+      drone.use(scripts, this.callback.bind(null, null));
     },
     "should have load the plugin(s)": function () {
       assert.isArray(plugins);
       names.forEach(function (name) {
-        assert.isFunction(carapace[name]);
+        assert.isFunction(drone[name]);
       });
     }
   };
@@ -45,13 +45,13 @@ macros.assertUse = function (plugins, vows) {
 macros.assertRun = function (script, argv, vows) {
   var context = {
     topic: function () {
-      carapace.on('drone::running', this.callback.bind(carapace, null));
-      carapace.argv = argv || [];
-      carapace.script = script;
-      carapace.run();
+      drone.on('drone::running', this.callback.bind(drone, null));
+      drone.argv = argv || [];
+      drone.script = script;
+      drone.run();
     },
     "should fire the `drone::running` event": function () {
-      assert.equal(carapace.event, 'drone::running');
+      assert.equal(drone.event, 'drone::running');
     },
     "should rewrite process.argv transparently": function () {
       assert.equal(process.argv[1], script);
@@ -67,7 +67,7 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
   var context = {
     topic: function () {
       var that = this,
-          child = fork(carapace.bin, [script].concat(argv));
+          child = fork(drone.bin, [script].concat(argv));
           
       child.on('message', function onRunning(info) {
         if (info.event === 'drone::running') {
@@ -89,10 +89,10 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
   options.argv.push(options.script);
   
   var context = {
-    "when spawning a child carapace": {
+    "when spawning a child drone": {
       topic: function () {
         var that = this,
-            child = fork(carapace.bin, options.argv, { silent: true });
+            child = fork(drone.bin, options.argv, { silent: true });
 
         child.on('message', function onPort (info) {
           if (info.data && info.data.port) {
@@ -126,7 +126,7 @@ macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows)
   };
   
   if (options.keepalive) {
-    context['when spawning a child carapace'] = extendContext(context['when spawning a child carapace'], vows);
+    context['when spawning a child drone'] = extendContext(context['when spawning a child drone'], vows);
   }
   else {
     context = extendContext(context, vows);

@@ -1,5 +1,5 @@
 /*
- * use-test.js: Basic tests for the carapace module
+ * use-test.js: Basic tests for the drone module
  *
  * (C) 2011 Nodejitsu Inc
  * MIT LICENCE
@@ -24,9 +24,9 @@ options = {
   keepalive: true
 };
     
-vows.describe('carapace/spawn/custom-plugin').addBatch({
-  "When using haibu-carapace": {
-    "spawning a child carapace with a custom plugin": helper.assertParentSpawn(options, {
+vows.describe('drone/spawn/custom-plugin').addBatch({
+  "When using haibu-drone": {
+    "spawning a child drone with a custom plugin": helper.assertParentSpawn(options, {
       "a request to the server started by pluginserver.js": {
         topic: function (info, _child) {
           child = _child;

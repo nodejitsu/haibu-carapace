@@ -10,16 +10,16 @@ var assert = require('assert'),
     request = require('request'),
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
-vows.describe('carapace/simple/use-pluginserver').addBatch({
-  "When using haibu-carapace": {
+vows.describe('drone/simple/use-pluginserver').addBatch({
+  "When using haibu-drone": {
     "a custom plugin that starts a server" : helper.assertUse([path.join(__dirname, '..', 'fixtures', 'pluginserver.js')], {
       "a request to the server started by pluginserver.js": {
         topic: function () {
           var that = this;
           
-          carapace.pluginserver(null, function () {
+          drone.pluginserver(null, function () {
             request({ uri: 'http://localhost:1337' }, that.callback);
           });
         },

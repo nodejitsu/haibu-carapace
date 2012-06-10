@@ -1,11 +1,11 @@
 {
-  "name": "haibu-carapace",
-  "main": "lib/carapace.js",
+  "name": "haibu-drone",
+  "main": "lib/drone.js",
   "version": "0.5.6",
   "author": "Nodejitsu Inc. <info@nodejitsu.com>",
   "repository": {
     "type": "git",
-    "url": "http://github.com/nodejitsu/haibu-carapace.git"
+    "url": "http://github.com/nodejitsu/haibu-drone.git"
   },
   "maintainers": [
     "bmeck <bradley@nodejitsu.com>",
@@ -28,7 +28,7 @@
     "node": ">= 0.4.8"
   },
   "bin": {
-    "carapace": "./bin/carapace"
+    "drone": "./bin/drone"
   },
   "scripts": {
     "test": "sudo vows test/**/*-test.js --isolate --spec"

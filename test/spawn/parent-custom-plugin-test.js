@@ -1,5 +1,5 @@
 /*
- * use-test.js: Basic tests for the carapace module
+ * use-test.js: Basic tests for the drone module
  *
  * (C) 2011 Nodejitsu Inc
  * MIT LICENCE
@@ -13,7 +13,7 @@ var assert = require('assert'),
     request = require('request'),
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
 var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
     custom = path.join(__dirname, '..', 'fixtures', 'custom.js'),
@@ -27,9 +27,9 @@ options = {
   keepalive: true
 };
     
-vows.describe('carapace/spawn/custom-plugin').addBatch({
-  "When using haibu-carapace": {
-    "spawning a child carapace with a custom plugin": helper.assertParentSpawn(options, {
+vows.describe('drone/spawn/custom-plugin').addBatch({
+  "When using haibu-drone": {
+    "spawning a child drone with a custom plugin": helper.assertParentSpawn(options, {
       "after the plugin is loaded": {
         topic: function (info, child) {
           var that = this;
@@ -39,7 +39,7 @@ vows.describe('carapace/spawn/custom-plugin').addBatch({
             }
           });
         },
-        "should emit the `carapace::custom` event": function (_, child, info) {
+        "should emit the `drone::custom` event": function (_, child, info) {
           assert.isTrue(info.data.custom);
           child.kill();
         }

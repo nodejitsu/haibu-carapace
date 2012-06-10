@@ -1,5 +1,5 @@
 /*
- * use-test.js: Basic tests for the carapace module
+ * use-test.js: Basic tests for the drone module
  *
  * (C) 2011 Nodejitsu Inc
  * MIT LICENCE
@@ -13,15 +13,15 @@ var assert = require('assert'),
     request = require('request'),
     vows = require('vows'),
     helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+    drone = require('../../lib/drone');
 
 var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
     script =  path.join(jail, 'server.js'),
     argv = [],
     PORT = 5060;
     
-vows.describe('carapace/run/process').addBatch({
-  "When using haibu-carapace": {
+vows.describe('drone/run/process').addBatch({
+  "When using haibu-drone": {
     "and spawning `/.server.js` in a separate process": helper.assertSpawn(PORT, script, argv, {
       "should correctly start the HTTP server": {
         topic: function (child) {

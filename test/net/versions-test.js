@@ -8,7 +8,7 @@
 
 var assert = require('assert'),
     vows = require('vows'),
-    carapace = require('../../lib/carapace'),
+    drone = require('../../lib/drone'),
     net = require('../../lib/net');
 
 function assertOverride(fnName) {
@@ -21,8 +21,8 @@ function assertOverride(fnName) {
   return context;
 }
     
-vows.describe('carapace/net/multiple-versions').addBatch({
-  "When using the haibu-carapace net module": {
+vows.describe('drone/net/multiple-versions').addBatch({
+  "When using the haibu-drone net module": {
     "the getOverride() method": {
       "v0.4.12": assertOverride('_doListen'),
       "v0.5.2": assertOverride('_listen2'),
