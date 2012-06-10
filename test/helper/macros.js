@@ -45,13 +45,13 @@ macros.assertUse = function (plugins, vows) {
 macros.assertRun = function (script, argv, vows) {
   var context = {
     topic: function () {
-      carapace.on('running', this.callback.bind(carapace, null));
+      carapace.on('drone::running', this.callback.bind(carapace, null));
       carapace.argv = argv || [];
       carapace.script = script;
       carapace.run();
     },
-    "should fire the `carapace::running` event": function () {
-      assert.equal(carapace.event, 'running');
+    "should fire the `drone::running` event": function () {
+      assert.equal(carapace.event, 'drone::running');
     },
     "should rewrite process.argv transparently": function () {
       assert.equal(process.argv[1], script);
@@ -70,7 +70,7 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
           child = fork(carapace.bin, [script].concat(argv));
           
       child.on('message', function onRunning(info) {
-        if (info.event === 'running') {
+        if (info.event === 'drone::running') {
           child.removeListener('message', onRunning);
           that.callback.call(null, null, child, info);
         }
