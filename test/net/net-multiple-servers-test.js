@@ -40,7 +40,7 @@ vows.describe('carapace/net/dolisten').addBatch({
         });
 
         child.on('message', function onPort (info) {
-          info.event == 'port' && result.events.push({
+          info.event == 'port::bound' && result.events.push({
             event: info.event,
             info: info.data
           });

@@ -33,7 +33,7 @@ vows.describe('carapace/spawn/custom-plugin').addBatch({
       "after the plugin is loaded": {
         topic: function (info, child) {
           var that = this;
-          child.once('message', function (info) {
+          child.on('message', function (info) {
             if (info.event === 'custom') {
               that.callback(null, child, info);
             }
