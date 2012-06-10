@@ -1,23 +1,24 @@
-var carapace = require('../lib/carapace');
+var drone = require('../lib/drone');
 
-carapace.on('carapace::plugin::error', function (info) {
+drone.debug = true;
+drone.on('drone::plugin::error', function (info) {
   console.log('Error loading plugin: ' + info.plugin);
   console.log(info.error.message);
   console.dir(info.error.stack.split('\n'))
 });
 
-carapace.script = 'helloworld.js';
+drone.script = 'helloworld.js';
 
-carapace.use([
-  carapace.plugins.heartbeat, 
+drone.use([
+  drone.plugins.heartbeat,
 ], function () {
-  carapace.run(function afterRun(err) {
+  drone.start(function(err){
     if (err) {
       return console.log(err);
     }
-    carapace.heartbeat(function () {
-      console.log('bump'.red);
+    drone.heartbeat(function () {
+      console.log('info: ' + 'bump'.red);
     },1000);
-    console.log(carapace.script + ' running on port '+ carapace.port);
+    console.log('info: ' + drone.script + ' running on port '+ drone.port);
   });
-});  
+});
