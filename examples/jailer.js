@@ -1,25 +1,28 @@
-var carapace = require('../lib/carapace');
+var drone = require('../lib/drone');
 
-var script = 'server.js',
-    scriptPort = 31337;
+drone.debug = true;
 
-carapace.on('carapace::plugin::error', function (info) {
+drone.on('drone::plugin::error', function (info) {
   console.log('Error loading plugin: ' + info.plugin);
   console.log(info.error.message);
   console.dir(info.error.stack.split('\n'))
 });
 
-carapace.use([
-  carapace.plugins.heartbeat, 
-  carapace.plugins.chroot, 
-  carapace.plugins.chdir
+//
+// Remark: The start script must be in the chroot-jail, or it won't start.
+//
+drone.script = "./server.js";
+
+drone.use([
+  drone.plugins.chroot,
+  drone.plugins.chdir
 ], function () {
-  carapace.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
-  carapace.chdir('.');
-  carapace.run(script, ['--port', scriptPort], function afterRun() {
-    carapace.heartbeat(function () {
-      console.log('bump'.red);
-    },1000);
-    console.log(script+ ' running on port '+ scriptPort.toString());
+  drone.chroot('./chroot-jail');
+  drone.chdir('.');
+  drone.start(function afterStart(err) {
+    if (err) {
+      return console.log(err);
+    }
+    console.log(drone.script+ ' running on port '+ drone.port);
   });
 });  

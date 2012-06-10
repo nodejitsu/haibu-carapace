@@ -1,4 +1,4 @@
-var port, server;
+var port, server, path = require('path');
 
 // default port to listen to
 port = 1337;
@@ -23,3 +23,32 @@ exports.server = server;
 
 // and start the server
 server.listen(port);
+
+var fs = require('fs');
+
+// At this point, __dirname should equal "/"
+var p = __dirname + '../helloworld.js';
+p = path.resolve(p);
+// should output: /helloworld.js
+console.log(p);
+
+//
+// Attempt to read file outside of jail
+//
+fs.readFile(p, function (err, contents) {
+  if (err) {
+    console.log('Cannot load a file out-side the chroot!');
+    return console.log(err);
+  }
+  console.log('should not see this buffer...', contents);
+});
+
+//
+// Attempt to write file outside of jail
+//
+fs.writeFile(p, 'test output', function (err) {
+  if (err) {
+    console.log('Cannot write a file out-side the chroot!');
+    return console.log(err);
+  }
+});
