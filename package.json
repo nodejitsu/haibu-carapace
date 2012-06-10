@@ -13,6 +13,7 @@
   ],
   "dependencies": {
     "async": "0.1.x",
+    "colors": "*",
     "daemon": "0.4.x",
     "eventemitter2": "0.4.x",
     "optimist": "0.3.x",
