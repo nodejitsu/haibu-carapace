@@ -16,7 +16,8 @@
     "daemon": "0.4.x",
     "eventemitter2": "0.4.x",
     "optimist": "0.3.x",
-    "semver": "1.0.x"
+    "semver": "1.0.x",
+    "utile": "0.1.x"
   },
   "devDependencies": {
     "eyes": "0.1.x",
