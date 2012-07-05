@@ -1,7 +1,7 @@
 {
   "name": "haibu-carapace",
   "main": "lib/carapace.js",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "author": "Nodejitsu Inc. <info@nodejitsu.com>",
   "repository": {
     "type": "git",
