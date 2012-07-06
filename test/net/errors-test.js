@@ -14,7 +14,7 @@ var assert = require('assert'),
     carapace = require('../../lib/carapace');
 
 var script = path.join(__dirname, '..', 'fixtures', 'eacces.js'),
-    argv = ['--setuid', 'nobody', script];
+    argv = ['--plugin', 'net', '--setuid', 'nobody', script];
 
 vows.describe('carapace/net/dolisten').addBatch({
   "When using haibu-carapace": {
