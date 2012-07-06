@@ -15,7 +15,7 @@ var assert = require('assert'),
 
 var script = path.join(__dirname, '..', 'fixtures', 'multi-server.js'),
     testPort = 8000,
-    argv = [script];
+    argv = ['--plugin', 'net', script];
 
 vows.describe('carapace/net/dolisten').addBatch({
   "When using haibu-carapace": {

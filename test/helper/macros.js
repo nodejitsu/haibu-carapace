@@ -86,6 +86,7 @@ macros.assertSpawn = function (PORT, script, argv, vows) {
 
 macros.assertParentSpawn = function (options, /*PORT, script, argv, cwd,*/ vows) {
   options.argv = options.argv.slice(0);
+  options.argv.push('--plugin', 'net');
   options.argv.push(options.script);
   
   var context = {
