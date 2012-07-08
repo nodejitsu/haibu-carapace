@@ -12,7 +12,7 @@ var assert = require('assert'),
     vows = require('vows'),
     helper = require('../helper/macros.js');
 
-var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
+var jail = path.join(__dirname, '..', '..', 'examples', 'app'),
     custom = path.join(__dirname, '..', 'fixtures', 'pluginserver.js'),
     options,
     child;

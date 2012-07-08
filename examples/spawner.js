@@ -1,4 +1,5 @@
-var carapace = require('../lib/carapace');
+var path = require('path'),
+    carapace = require('../lib/carapace');
 
 var script = 'server.js',
     scriptPort = 31337;
@@ -10,16 +11,16 @@ carapace.on('carapace::plugin::error', function (info) {
 });
 
 carapace.use([
-  carapace.plugins.heartbeat, 
-  carapace.plugins.chroot, 
+  carapace.plugins.heartbeat,
   carapace.plugins.chdir
 ], function () {
-  carapace.chroot('./examples/chroot-jail', console.log.bind(null, 'hello'));
-  carapace.chdir('.');
+  carapace.chdir(path.join(__dirname, 'app'));
   carapace.run(script, ['--port', scriptPort], function afterRun() {
     carapace.heartbeat(function () {
-      console.log('bump'.red);
-    },1000);
-    console.log(script+ ' running on port '+ scriptPort.toString());
+      carapace.on('heartbeat', function () {
+        console.log('still running');
+      });
+    }, 1000);
+    console.log(script + ' running on port ' + scriptPort.toString());
   });
 });  

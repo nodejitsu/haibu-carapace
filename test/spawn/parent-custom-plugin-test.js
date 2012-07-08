@@ -15,7 +15,7 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
+var jail = path.join(__dirname, '..', '..', 'examples', 'app'),
     custom = path.join(__dirname, '..', 'fixtures', 'custom.js'),
     options;
     
