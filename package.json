@@ -23,7 +23,7 @@
     "vows": "0.6.x"
   },
   "engines": {
-    "node": ">= 0.4.8"
+    "node": ">= 0.8.0"
   },
   "bin": {
     "carapace": "./bin/carapace"
