@@ -14,7 +14,7 @@ var assert = require('assert'),
 vows.describe('carapace/simple/use').addBatch({
   "When using haibu-carapace": {
     "use chdir plugins" : helper.assertUse(['chdir'], {
-      "and use chroot and heartbeat" : helper.assertUse(['chroot', 'heartbeat'])
+      "and use heartbeat" : helper.assertUse(['heartbeat'])
     })
   }
 }).export(module);

@@ -13,14 +13,12 @@
   ],
   "dependencies": {
     "async": "0.1.x",
-    "daemon": "0.4.x",
     "eventemitter2": "0.4.x",
     "optimist": "0.3.x",
     "semver": "1.0.x"
   },
   "devDependencies": {
     "eyes": "0.1.x",
-    "node-fork": "git://github.com/bmeck/node-fork.git",
     "request": "2.9.x",
     "vows": "0.6.x"
   },
