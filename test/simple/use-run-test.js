@@ -13,7 +13,7 @@ var assert = require('assert'),
 
 vows.describe('carapace/simple/use-plugins').addBatch({
   "When using haibu-carapace":  {
-    "load up chdir, chroot, heartbeat plugins" : helper.assertUse(['chdir', 'chroot', 'heartbeat'], {
+    "load up chdir, heartbeat plugins" : helper.assertUse(['chdir', 'heartbeat'], {
       "and running the heartbeat plugin" : {
         topic : function () {
           carapace.once('heartbeat', this.callback.bind(carapace, null));
