@@ -51,11 +51,10 @@ vows.describe('carapace/net/dolisten').addBatch({
           assert.equal(info.exitCode, -1);
         },
         "and emit the `port` event with the correct port": function (_, info, child) {
-          var desired = 80;
-              
           assert.equal(info.events.length, 1);
           info.events.forEach(function (event, index) {
-            assert.equal(event.info.desired, desired);
+            assert.equal(event.info.addr, '0.0.0.0');
+            assert.equal(event.info.desired, 80);
           });
         }
       }
