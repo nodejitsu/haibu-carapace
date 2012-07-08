@@ -15,7 +15,7 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var jail = path.join(__dirname, '..', '..', 'examples', 'chroot-jail'),
+var jail = path.join(__dirname, '..', '..', 'examples', 'app'),
     script =  path.join(jail, 'server.js'),
     argv = [],
     PORT = 5060;
@@ -31,7 +31,7 @@ vows.describe('carapace/run/process').addBatch({
             that.callback.apply(null, arguments);
           });      
         },
-        "that responds with a cwd inside the chroot jail": function (err, res, body) {
+        "that responds with a cwd inside the app root": function (err, res, body) {
           assert.isNull(err);
           assert.equal(res.statusCode, 200);
           assert.equal(body, process.cwd());

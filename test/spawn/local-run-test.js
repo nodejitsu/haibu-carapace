@@ -15,7 +15,7 @@ var assert = require('assert'),
     helper = require('../helper/macros.js'),
     carapace = require('../../lib/carapace');
 
-var script = path.join(__dirname, '..', '..', 'examples', 'chroot-jail', 'server.js');
+var script = path.join(__dirname, '..', '..', 'examples', 'app', 'server.js');
     
 vows.describe('carapace/spawn/local').addBatch({
   "When using haibu-carapace": {
