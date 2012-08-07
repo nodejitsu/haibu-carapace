@@ -55,6 +55,7 @@ vows.describe('carapace/net/dolisten').addBatch({
           info.events.forEach(function (event, index) {
             assert.equal(event.info.addr, '0.0.0.0');
             assert.equal(event.info.desired, 80);
+            assert.equal(event.info.port, 1024);
           });
         }
       }
