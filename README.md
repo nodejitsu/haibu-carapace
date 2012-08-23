@@ -1,3 +1,4 @@
+[![build status](https://secure.travis-ci.org/nodejitsu/haibu-carapace.png)](http://travis-ci.org/nodejitsu/haibu-carapace)
 # haibu-carapace
 
 Haibu Drone's Little Shell
