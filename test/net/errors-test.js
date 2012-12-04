@@ -7,14 +7,14 @@
  */
 
 var assert = require('assert'),
-    path = require('path'),
-    fork = require('child_process').fork,
-    vows = require('vows'),
-    helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+  path = require('path'),
+  fork = require('child_process').fork,
+  vows = require('vows'),
+  helper = require('../helper/macros.js'),
+  carapace = require('../../lib/carapace');
 
 var script = path.join(__dirname, '..', 'fixtures', 'eacces.js'),
-    argv = ['--plugin', 'net', '--setuid', 'nobody', script];
+  argv = ['--plugin', 'net', '--setuid', 'nobody', script];
 
 vows.describe('carapace/net/dolisten').addBatch({
   "When using haibu-carapace": {
@@ -22,22 +22,22 @@ vows.describe('carapace/net/dolisten').addBatch({
       topic: function () {
         var callback = this.callback;
         var that = this,
-            result,
-            child;
-            
+          result,
+          child;
+
         result = {
           events: [],
           exitCode: -1
         };
-            
+
         child = fork(carapace.bin, argv, { silent: true });
 
         child.on('message', function onPort (info) {
           if (info.event == 'port') {
             result.events.push({
-               event: info.event,
-               info: info.data
-             });
+              event: info.event,
+              info: info.data
+            });
             child.kill();
             callback(null, result);
           }
@@ -55,7 +55,10 @@ vows.describe('carapace/net/dolisten').addBatch({
           info.events.forEach(function (event, index) {
             assert.equal(event.info.addr, '0.0.0.0');
             assert.equal(event.info.desired, 80);
-            assert.equal(event.info.port, 1024);
+            // Note: win32 allows non-root access to ports < 1024 including port 80
+            if(process.platform !== 'win32') {
+              assert.equal(event.info.port, 1024);
+            }
           });
         }
       }
