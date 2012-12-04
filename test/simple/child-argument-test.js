@@ -7,31 +7,32 @@
  */
 
 var assert = require('assert'),
-    path = require('path'),
-    spawn = require('child_process').spawn,
-    vows = require('vows'),
-    helper = require('../helper/macros.js'),
-    carapace = require('../../lib/carapace');
+  path = require('path'),
+  spawn = require('child_process').spawn,
+  vows = require('vows'),
+  helper = require('../helper/macros.js'),
+  carapace = require('../../lib/carapace');
 
 var script = path.join(__dirname, '..', 'fixtures' ,'checkchildargs.js'),
-    testPort = 8000,
-    checkargs = ['argument', '-a', 'aargument', '--test', 'testargument'];
-    argv = [script];
+  testPort = 8000,
+  checkargs = ['argument', '-a', 'aargument', '--test', 'testargument'],
+  args = [carapace.bin, script];
 
 vows.describe('carapace/simple/child-argument').addBatch({
   "When using haibu-carapace": {
     "spawning the checkchildargs.js script via the child carapace": {
       topic: function () {
         var that = this,
-            child,
-            result;
-            
+          child,
+          result;
+
         result = {
           arguments: '',
           exitCode: -1
         };
-        
-        child = spawn(carapace.bin, argv.concat(checkargs));
+
+        // Note: windows needs the path to node for spawn to work!!
+        child = spawn(process.execPath, args.concat(checkargs));
 
         child.stdout.on('data', function (data) {
           result.arguments += data;
@@ -39,7 +40,6 @@ vows.describe('carapace/simple/child-argument').addBatch({
 
         child.on('exit', function (code) {
           result.exitCode = code;
-
           //
           // Process all events before asserting
           //
@@ -56,15 +56,19 @@ vows.describe('carapace/simple/child-argument').addBatch({
           assert.equal(info.exitCode, 0);
         },
         "and correct client arguments": function (_, info, child) {
+
           var childargs = JSON.parse(info.arguments),
-              resultScript,
-              node,
-              
+            resultScript,
+            node,
+
           //
           // First two are reference to node and the script itself
           //
-          node = childargs.splice(0, 1);
+            node = childargs.splice(0, 1);
+
+
           resultScript = childargs.splice(0, 1);
+
           assert.equal(resultScript, script);
           assert.deepEqual(childargs, checkargs);
         }
