@@ -29,7 +29,7 @@
     "carapace": "./bin/carapace"
   },
   "scripts": {
-    "test": "sudo vows test/**/*-test.js --isolate --spec"
+    "test": "vows test/*/*-test.js --isolate --spec"
   }
 }
 
