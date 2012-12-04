@@ -20,7 +20,7 @@
   "devDependencies": {
     "eyes": "0.1.x",
     "request": "2.9.x",
-    "vows": "0.6.x"
+    "vows": "0.7.x"
   },
   "engines": {
     "node": ">= 0.8.0"
