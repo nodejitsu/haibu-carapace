@@ -43,7 +43,7 @@ List of known plugins, and options (if any) used by them
 ## Installation
 
 ``` bash
-  $ [sudo] npm install carapace
+  $ [sudo] npm install haibu-carapace
 ```
 
 ## Run Tests
