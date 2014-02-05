@@ -15,6 +15,8 @@ carapace.use([
   carapace.plugins.chdir
 ], function () {
   carapace.chdir(path.join(__dirname, 'app'));
+  carapace.script = script;
+
   carapace.run(script, ['--port', scriptPort], function afterRun() {
     carapace.heartbeat(function () {
       carapace.on('heartbeat', function () {

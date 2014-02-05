@@ -4,4 +4,7 @@
  */
 
 console.log('%j', process.argv);
-process.exit(0);
+
+// no need to call process.exit().
+// Prevents stdout from being sent before exit
+// especially on win32
